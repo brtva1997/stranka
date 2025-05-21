@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: #2c3e50;
   color: #ecf0f1;
   display: flex;
@@ -16,7 +16,7 @@ body {
 
 .login-container {
   background-color: #34495e;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 300px;
@@ -43,6 +43,16 @@ body {
 }
 
 .login-container button {
- 
-::contentReference[oaicite:0]{index=0}
- 
+  width: 100%;
+  padding: 10px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-container button:hover {
+  background-color: #3498db;
+}
