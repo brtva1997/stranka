@@ -1,4 +1,4 @@
 [
-  { "id": 1, "week": "2025-04-18", "amount": 200, "paid": false },
+  { "id": 1, "week": "2025-04-18", "amount": 500, "paid": false },
   { "id": 2, "week": "2025-04-25", "amount": 200, "paid": false }
 ]
