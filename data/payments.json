@@ -4,7 +4,7 @@
   { "week": "02/05/2025", "amount": 200, "paid": false },
   { "week": "09/05/2025", "amount": 200, "paid": false },
   { "week": "16/05/2025", "amount": 200, "paid": false },
-  { "week": "23/05/2025", "amount": 200, "paid": false },
+  { "week": "23/05/2025", "amount": 200, "paid": false },as
   { "week": "30/05/2025", "amount": 200, "paid": false },
   { "week": "06/06/2025", "amount": 200, "paid": false },
   { "week": "13/06/2025", "amount": 200, "paid": false },
