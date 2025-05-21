@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
+
 const app = express();
 
 // Middleware
@@ -13,8 +14,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// Načtení nebo vytvoření splátkového kalendáře
-const paymentsFile = path.join(__dirname, 'data', 'payments.json');
+// Cesty k souborům
+const paymentsDir = path.join(__dirname, 'data');
+const paymentsFile = path.join(paymentsDir, 'payments.json');
+
+// Zajištění existence adresáře 'data/'
+if (!fs.existsSync(paymentsDir)) {
+  fs.mkdirSync(paymentsDir, { recursive: true });
+}
+
+// Generování nebo načtení splátkového kalendáře
 let payments = [];
 
 function generatePayments() {
