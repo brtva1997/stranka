@@ -1,58 +1,52 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ---------- obecné ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#121212;
+  color:#f5f5f5;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
 }
+/* ---------- login ---------- */
+.login-container{
+  background:#1e1e1e;
+  padding:32px 40px;
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  width:320px;
+}
+.login-container h2{margin-bottom:24px;text-align:center}
+.login-container label{display:block;margin-bottom:12px;font-size:14px}
+.login-container input{
+  width:100%;padding:10px;border:none;border-radius:8px;
+  background:#2c2c2c;color:#fff;margin-top:6px
+}
+.login-container button{
+  width:100%;padding:12px;margin-top:20px;border:none;border-radius:8px;
+  background:#4caf50;color:#fff;font-weight:bold;cursor:pointer;
+  transition:background .3s
+}
+.login-container button:hover{background:#66bb6a}
 
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* ---------- dashboard ---------- */
+.dash-container{max-width:960px;width:90%}
+.dash-container h2{text-align:center;margin-bottom:8px}
+.total-paid{text-align:center;margin-bottom:16px;font-size:18px}
+table{
+  width:100%;border-collapse:collapse;margin-bottom:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4)
 }
-
-.login-container {
-  background-color: #34495e;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 300px;
+th,td{padding:12px;text-align:center}
+th{background:#263238}
+tr:nth-child(even){background:#1d1d1d}
+tr:nth-child(odd){background:#242424}
+input[type=checkbox]{transform:scale(1.2)}
+.submit-btn{
+  display:block;margin:0 auto 12px;padding:10px 24px;
+  background:#4caf50;color:#fff;border:none;border-radius:8px;cursor:pointer;
+  transition:background .3s
 }
-
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.login-container label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.login-container input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #7f8c8d;
-  border-radius: 4px;
-  background-color: #ecf0f1;
-  color: #2c3e50;
-}
-
-.login-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #2980b9;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.login-container button:hover {
-  background-color: #3498db;
-}
+.submit-btn:hover{background:#66bb6a}
+.logout{display:block;text-align:center;color:#90caf9}
