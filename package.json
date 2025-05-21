@@ -1,0 +1,15 @@
+{
+  "name": "payment-scheduler",
+  "version": "1.0.0",
+  "description": "A payment scheduling application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "body-parser": "^1.19.0",
+    "fs": "0.0.1-security"
+  }
+}
