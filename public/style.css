@@ -65,3 +65,31 @@ body {
 .login-container button:hover {
   background-color: #e0e0e0;
 }
+
+table {
+  width: 60%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: #e0e0e0;
+}
+
+input[type="number"] {
+  width: 80px;
+}
+
+.submit-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+}
