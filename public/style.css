@@ -1,95 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
+/* Výchozí (světlý) režim */
 body {
-  background: url('https://source.unsplash.com/1600x900/?finance,technology') no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.login-container {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 40px;
-  width: 350px;
-  color: #ffffff;
-}
-
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 600;
-}
-
-.login-container input[type="text"],
-.login-container input[type="password"] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 10px 0 20px 0;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-.login-container input::placeholder {
-  color: #ffffff;
-  opacity: 0.7;
-}
-
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
   background-color: #ffffff;
   color: #000000;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  /* ostatní styly */
 }
 
-.login-container button:hover {
-  background-color: #e0e0e0;
-}
+/* Tmavý režim */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #ffffff;
+    /* ostatní styly pro tmavý režim */
+  }
 
-table {
-  width: 60%;
-  margin: 0 auto;
-  border-collapse: collapse;
-  background-color: #fff;
-}
+  .login-container {
+    background: rgba(255, 255, 255, 0.1);
+    /* další úpravy pro tmavý režim */
+  }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 12px;
-  text-align: center;
-}
-
-th {
-  background-color: #e0e0e0;
-}
-
-input[type="number"] {
-  width: 80px;
-}
-
-.submit-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 16px;
+  /* Přidej další selektory podle potřeby */
 }
