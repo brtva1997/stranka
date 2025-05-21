@@ -15,7 +15,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
+const usersFilePath = path.join(__dirname, 'data', 'users.json');
 const paymentsFilePath = path.join(__dirname, 'data', 'payments.json');
+
+function loadUsers() {
+  if (!fs.existsSync(usersFilePath)) {
+    return [];
+  }
+  const data = fs.readFileSync(usersFilePath, 'utf8');
+  return JSON.parse(data);
+}
 
 function loadPayments() {
   if (!fs.existsSync(paymentsFilePath)) {
@@ -35,11 +44,14 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  if (username === 'admin' && password === 'admin') {
+  const users = loadUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+  if (user) {
     req.session.loggedIn = true;
+    req.session.username = username;
     res.redirect('/dashboard');
   } else {
-    res.send('Invalid credentials');
+    res.send('Neplatné přihlašovací údaje');
   }
 });
 
@@ -49,25 +61,25 @@ app.get('/dashboard', (req, res) => {
   }
   const payments = loadPayments();
   res.send(`
-    <h1>Payment Dashboard</h1>
+    <h1>Tabulka splátek</h1>
     <table>
-      <tr><th>Week</th><th>Amount (£)</th><th>Status</th><th>Action</th></tr>
+      <tr><th>Týden</th><th>Částka (£)</th><th>Stav</th><th>Akce</th></tr>
       ${payments.map((payment, index) => `
         <tr>
           <td>${payment.week}</td>
           <td>${payment.amount}</td>
-          <td>${payment.paid ? 'Paid' : 'Unpaid'}</td>
+          <td>${payment.paid ? 'Zaplaceno' : 'Nezaplaceno'}</td>
           <td>
             <form action="/update-payment" method="POST">
               <input type="hidden" name="index" value="${index}">
               <input type="checkbox" name="paid" ${payment.paid ? 'checked' : ''}>
-              <button type="submit">Update</button>
+              <button type="submit">Upravit</button>
             </form>
           </td>
         </tr>
       `).join('')}
     </table>
-    <a href="/logout">Logout</a>
+    <a href="/logout">Odhlásit se</a>
   `);
 });
 
@@ -89,5 +101,5 @@ app.get('/logout', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server běží na http://localhost:${port}`);
 });
