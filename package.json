@@ -1,6 +1,7 @@
 {
   "name": "splatkovy-kalendar",
   "version": "1.0.0",
+  "description": "Aplikace pro správu splátkového kalendáře",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
