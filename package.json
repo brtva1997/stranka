@@ -1,12 +1,14 @@
 {
-  "name": "splatkovy-kalendar",
+  "name": "splatky-app",
   "version": "1.0.0",
-  "description": "Aplikace pro správu splátkového kalendáře",
+  "description": "Aplikace pro správu týdenních splátek",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "body-parser": "^1.20.2"
   }
 }
