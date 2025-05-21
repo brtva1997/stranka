@@ -1,105 +1,139 @@
-const express = require('express');
-const session = require('express-session');
+const express  = require('express');
+const session  = require('express-session');
+const fs       = require('fs');
+const path     = require('path');
 const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
 
-const app = express();
-const port = 3000;
+const app  = express();
+const PORT = 3000;
 
+// ---------- cesty k souborům ----------
+const DATA_DIR       = path.join(__dirname, 'data');
+const USERS_FILE     = path.join(DATA_DIR, 'users.json');
+const PAYMENTS_FILE  = path.join(DATA_DIR, 'payments.json');
+
+// ---------- middleware ----------
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'your-secret-key',
+  secret: 'super-tajny-klic',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: { httpOnly: true, secure: false }
 }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-const usersFilePath = path.join(__dirname, 'data', 'users.json');
-const paymentsFilePath = path.join(__dirname, 'data', 'payments.json');
+// ---------- helpery ----------
+function ensureDataDir() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+}
 
-function loadUsers() {
-  if (!fs.existsSync(usersFilePath)) {
-    return [];
+function loadJSON(filePath, fallback) {
+  if (fs.existsSync(filePath)) {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   }
-  const data = fs.readFileSync(usersFilePath, 'utf8');
-  return JSON.parse(data);
+  fs.writeFileSync(filePath, JSON.stringify(fallback, null, 2));
+  return fallback;
 }
 
-function loadPayments() {
-  if (!fs.existsSync(paymentsFilePath)) {
-    return [];
+function generatePayments() {
+  const start = new Date('2025-04-18');
+  const total = 4000;
+  const weekly = 200;
+  const count = total / weekly;        // 20 týdnů
+  const arr = [];
+  for (let i = 0; i < count; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i * 7);
+    arr.push({
+      id:     i + 1,
+      week:   d.toISOString().split('T')[0],
+      amount: weekly,
+      paid:   false
+    });
   }
-  const data = fs.readFileSync(paymentsFilePath, 'utf8');
-  return JSON.parse(data);
+  return arr;
 }
 
-function savePayments(payments) {
-  fs.writeFileSync(paymentsFilePath, JSON.stringify(payments, null, 2));
+ensureDataDir();
+
+// ---------- data ----------
+const users    = loadJSON(USERS_FILE, [
+  { "username": "admin", "password": "admin", "role": "admin" },
+  { "username": "user",  "password": "user",  "role": "user"  }
+]);
+let payments   = loadJSON(PAYMENTS_FILE, generatePayments());
+
+// ---------- middleware auth ----------
+function isLogged(req, res, next) {
+  if (req.session.user) return next();
+  res.redirect('/');
 }
 
-app.get('/', (req, res) => {
+// ---------- routy ----------
+app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const users = loadUsers();
   const user = users.find(u => u.username === username && u.password === password);
-  if (user) {
-    req.session.loggedIn = true;
-    req.session.username = username;
-    res.redirect('/dashboard');
-  } else {
-    res.send('Neplatné přihlašovací údaje');
-  }
+  if (!user) return res.send('Neplatné přihlášení');
+
+  req.session.user = { username: user.username, role: user.role };
+  res.redirect('/dashboard');
 });
 
-app.get('/dashboard', (req, res) => {
-  if (!req.session.loggedIn) {
-    return res.redirect('/');
-  }
-  const payments = loadPayments();
+app.get('/dashboard', isLogged, (req, res) => {
+  const { role, username } = req.session.user;
+  const totalPaid = payments.filter(p => p.paid).reduce((s, p) => s + p.amount, 0);
+
+  // řádky tabulky
+  const rows = payments.map(p => `
+    <tr>
+      <td>${p.week}</td>
+      <td>£${p.amount}</td>
+      <td>${role === 'admin'
+        ? `<input type="checkbox" name="paid_${p.id}" ${p.paid ? 'checked' : ''}>`
+        : (p.paid ? '✓ Zaplaceno' : '✗ Nezaplaceno')}</td>
+    </tr>
+  `).join('');
+
+  const formOpen  = role === 'admin' ? '<form method="POST" action="/update">' : '';
+  const formClose = role === 'admin' ? '<button class="submit-btn" type="submit">💾 Uložit</button></form>' : '';
+
   res.send(`
-    <h1>Tabulka splátek</h1>
-    <table>
-      <tr><th>Týden</th><th>Částka (£)</th><th>Stav</th><th>Akce</th></tr>
-      ${payments.map((payment, index) => `
-        <tr>
-          <td>${payment.week}</td>
-          <td>${payment.amount}</td>
-          <td>${payment.paid ? 'Zaplaceno' : 'Nezaplaceno'}</td>
-          <td>
-            <form action="/update-payment" method="POST">
-              <input type="hidden" name="index" value="${index}">
-              <input type="checkbox" name="paid" ${payment.paid ? 'checked' : ''}>
-              <button type="submit">Upravit</button>
-            </form>
-          </td>
-        </tr>
-      `).join('')}
-    </table>
-    <a href="/logout">Odhlásit se</a>
+    <!DOCTYPE html><html lang="cs"><head>
+    <meta charset="UTF-8"><title>Splátky</title>
+    <link rel="stylesheet" href="/css/style.css"></head><body>
+    <div class="dash-container">
+      <h2>Ahoj, ${username}</h2>
+      <p class="total-paid">Celkem splaceno: £${totalPaid}</p>
+      ${formOpen}
+      <table>
+        <thead><tr><th>Datum</th><th>Částka</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${formClose}
+      <a class="logout" href="/logout">Odhlásit se</a>
+    </div>
+    </body></html>
   `);
 });
 
-app.post('/update-payment', (req, res) => {
-  if (!req.session.loggedIn) {
-    return res.redirect('/');
-  }
-  const { index, paid } = req.body;
-  const payments = loadPayments();
-  payments[index].paid = paid === 'on';
-  savePayments(payments);
+app.post('/update', isLogged, (req, res) => {
+  if (req.session.user.role !== 'admin') return res.status(403).send('Forbidden');
+
+  payments = payments.map(p => ({
+    ...p,
+    paid: req.body[`paid_${p.id}`] === 'on'
+  }));
+  fs.writeFileSync(PAYMENTS_FILE, JSON.stringify(payments, null, 2));
   res.redirect('/dashboard');
 });
 
 app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/');
-  });
+  req.session.destroy(() => res.redirect('/'));
 });
 
-app.listen(port, () => {
-  console.log(`Server běží na http://localhost:${port}`);
-});
+// ---------- spuštění ----------
+app.listen(PORT, () => console.log(`⬢ Server běží: http://localhost:${PORT}`));
