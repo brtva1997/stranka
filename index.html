@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Splatkový kalendář</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+    h1, h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    tr.paid { background-color: #d4edda; }
+    tr.unpaid { background-color: #f8d7da; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Splatkový kalendář</h1>
+
+    <div id="login">
+      <h2>Přihlášení</h2>
+      <form id="loginForm">
+        <label>Uživatel: <input type="text" id="user" required /></label><br/><br/>
+        <label>Heslo: <input type="password" id="pass" required /></label><br/><br/>
+        <button type="submit">Přihlásit</button>
+      </form>
+      <p id="error" style="color:red; display:none;">Špatné přihlašovací údaje</p>
+    </div>
+
+    <div id="calendar" style="display:none;">
+      <h2>Přehled plateb</h2>
+      <table id="paymentsTable">
+        <thead>
+          <tr><th>Týden</th><th>Datum</th><th>Částka</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="saveBtn" style="display:none; margin-top:15px;">💾 Uložit změny</button>
+    </div>
+  </div>
+
+  <script>
+    let isAdmin = false;
+    let payments = [];
+
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const user = document.getElementById('user').value.trim();
+      const pass = document.getElementById('pass').value;
+      if ((user === 'admin' && pass === 'admin') || (user === 'test' && pass === 'test!')) {
+        isAdmin = user === 'admin';
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('calendar').style.display = 'block';
+        if (isAdmin) document.getElementById('saveBtn').style.display = 'inline-block';
+        loadPayments();
+      } else {
+        document.getElementById('error').style.display = 'block';
+      }
+    });
+
+    function loadPayments() {
+      fetch('/api/payments')
+        .then(res => res.json())
+        .then(data => {
+          payments = data;
+          renderTable();
+        });
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector('#paymentsTable tbody');
+      tbody.innerHTML = '';
+      payments.forEach((p, i) => {
+        const tr = document.createElement('tr');
+        tr.className = p.paid ? 'paid' : 'unpaid';
+        tr.innerHTML = `
+          <td>${p.week}</td>
+          <td>${p.date}</td>
+          <td>${isAdmin ? `<input type="text" value="${p.amount}" data-index="${i}" class="amount">` : p.amount}</td>
+          <td><input type="checkbox" ${p.paid ? 'checked' : ''} data-index="${i}" class="paid"/></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('paymentsTable').addEventListener('input', function(e) {
+      const index = e.target.dataset.index;
+      if (e.target.classList.contains('amount')) {
+        payments[index].amount = e.target.value;
+      }
+    });
+
+    document.getElementById('paymentsTable').addEventListener('change', function(e) {
+      const index = e.target.dataset.index;
+      if (e.target.classList.contains('paid')) {
+        payments[index].paid = e.target.checked;
+        renderTable();
+      }
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      fetch('/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payments)
+      }).then(res => res.json()).then(resp => {
+        alert('Změny byly uloženy.');
+      });
+    });
+  </script>
+</body>
+</html>
