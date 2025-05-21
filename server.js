@@ -1,101 +1,20 @@
-const express = require('express');
-const session = require('express-session');
-const fs = require('fs');
-const path = require('path');
-
-const app = express();
-
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: 'tajnyklic',
-  resave: false,
-  saveUninitialized: true
-}));
-
-// Cesty k souborům
-const paymentsDir = path.join(__dirname, 'data');
-const paymentsFile = path.join(paymentsDir, 'payments.json');
-
-// Zajištění existence adresáře 'data/'
-if (!fs.existsSync(paymentsDir)) {
-  fs.mkdirSync(paymentsDir, { recursive: true });
-}
-
-// Generování nebo načtení splátkového kalendáře
-let payments = [];
-
-function generatePayments() {
-  const startDate = new Date('2025-04-18');
-  const totalAmount = 4000;
-  const weeklyAmount = 200;
-  const numberOfPayments = totalAmount / weeklyAmount;
-  const generatedPayments = [];
-
-  for (let i = 0; i < numberOfPayments; i++) {
-    const dueDate = new Date(startDate);
-    dueDate.setDate(startDate.getDate() + i * 7);
-    generatedPayments.push({
-      id: i + 1,
-      dueDate: dueDate.toISOString().split('T')[0],
-      amount: weeklyAmount,
-      paid: false
-    });
-  }
-
-  return generatedPayments;
-}
-
-if (fs.existsSync(paymentsFile)) {
-  payments = JSON.parse(fs.readFileSync(paymentsFile));
-} else {
-  payments = generatePayments();
-  fs.writeFileSync(paymentsFile, JSON.stringify(payments, null, 2));
-}
-
-// Přihlašovací stránka
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Přihlášení
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  // Jednoduché ověření uživatele
-  if (username === 'admin' && password === 'admin') {
-    req.session.user = { username, role: 'admin' };
-    res.redirect('/dashboard');
-  } else if (username === 'user' && password === 'user') {
-    req.session.user = { username, role: 'user' };
-    res.redirect('/dashboard');
-  } else {
-    res.send('Neplatné přihlašovací údaje.');
-  }
-});
-
-// Ověření přihlášení
-function isAuthenticated(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-}
-
-// Dashboard
+// Generování HTML tabulky pro dashboard
 app.get('/dashboard', isAuthenticated, (req, res) => {
   const user = req.session.user;
   let tableRows = '';
+  let totalPaid = 0;
 
   payments.forEach(payment => {
+    const isPaid = payment.paid ? 'checked' : '';
+    totalPaid += payment.paid ? payment.amount : 0;
+
     tableRows += `
       <tr>
         <td>${payment.dueDate}</td>
         <td>£${payment.amount}</td>
         <td>
           ${user.role === 'admin' ? `
-            <input type="checkbox" name="paid_${payment.id}" ${payment.paid ? 'checked' : ''}>
+            <input type="checkbox" name="paid_${payment.id}" ${isPaid}>
           ` : `
             ${payment.paid ? 'Zaplaceno' : 'Nezaplaceno'}
           `}
@@ -113,10 +32,11 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     <head>
       <meta charset="UTF-8">
       <title>Splátkový kalendář</title>
-      <link rel="stylesheet" href="/style.css">
+      <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
       <h2>Vítej, ${user.username}</h2>
+      <p>Celkem splaceno: £${totalPaid}</p>
       ${formStart}
       <table>
         <tr>
@@ -130,32 +50,4 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     </body>
     </html>
   `);
-});
-
-// Aktualizace splátek
-app.post('/update-payments', isAuthenticated, (req, res) => {
-  if (req.session.user.role !== 'admin') {
-    return res.status(403).send('Přístup odepřen.');
-  }
-
-  payments = payments.map(payment => {
-    return {
-      ...payment,
-      paid: req.body[`paid_${payment.id}`] === 'on'
-    };
-  });
-
-  fs.writeFileSync(paymentsFile, JSON.stringify(payments, null, 2));
-  res.redirect('/dashboard');
-});
-
-// Odhlášení
-app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
-});
-
-// Spuštění serveru
-app.listen(3000, () => {
-  console.log('Server běží na http://localhost:3000');
 });

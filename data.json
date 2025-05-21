@@ -1,0 +1,50 @@
+[
+  {
+    "week": 1,
+    "date": "2025-05-25",
+    "amount": "1500 Kč",
+    "paid": true
+  },
+  {
+    "week": 2,
+    "date": "2025-06-01",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 3,
+    "date": "2025-06-08",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 4,
+    "date": "2025-06-15",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 5,
+    "date": "2025-06-22",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 6,
+    "date": "2025-06-29",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 7,
+    "date": "2025-07-06",
+    "amount": "1500 Kč",
+    "paid": false
+  },
+  {
+    "week": 8,
+    "date": "2025-07-13",
+    "amount": "1500 Kč",
+    "paid": false
+  }
+]
