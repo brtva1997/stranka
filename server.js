@@ -5,7 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.get('/', (req, res) => {
+  resuming
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if ((username === 'test' && password === 'test!') || (username === 'admin' && password === 'admin')) {
