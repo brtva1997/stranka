@@ -1,41 +1,63 @@
+/* Základní tmavý styl */
 body.dark {
-  background: #121212;
-  color: #f1f1f1;
+  background-color: #0d1117;
+  color: #c9d1d9;
   font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Login stránka – centrování */
+.login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  margin: 0;
+  height: 100vh;
 }
 
-.login-container, .container {
-  background: #1e1e1e;
-  padding: 30px;
+/* Login box */
+.login-box {
+  background-color: #161b22;
+  padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 0 10px #000;
-  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
   width: 100%;
+  text-align: center;
 }
 
-input, button {
-  display: block;
+/* Formulář */
+.login-box input {
   width: 100%;
+  padding: 12px;
   margin: 10px 0;
-  padding: 10px;
-  background: #2a2a2a;
-  border: 1px solid #444;
-  color: #fff;
-  border-radius: 5px;
+  border: none;
+  border-radius: 6px;
+  background-color: #21262d;
+  color: #c9d1d9;
+  font-size: 16px;
 }
 
-button {
-  background: #007bff;
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #238636;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-button:hover {
-  background: #0056b3;
+.login-box button:hover {
+  background-color: #2ea043;
+}
+
+/* Obecné stylování */
+.container {
+  padding: 30px;
 }
 
 table {
@@ -43,10 +65,12 @@ table {
   margin-top: 20px;
   border-collapse: collapse;
   font-size: 0.95em;
+  background-color: #161b22;
+  color: #c9d1d9;
 }
 
 th, td {
-  padding: 10px;
-  border-bottom: 1px solid #444;
+  padding: 12px;
+  border-bottom: 1px solid #30363d;
   text-align: left;
 }
