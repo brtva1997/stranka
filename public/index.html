@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Přihlášení</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="login-container">
-    <form class="login-form" method="POST" action="/login">
-      <h2>Přihlášení</h2>
-      <input type="text" name="username" placeholder="Uživatelské jméno" required />
-      <input type="password" name="password" placeholder="Heslo" required />
+    <h2>Přihlášení</h2>
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="Uživatelské jméno" required>
+      <input type="password" name="password" placeholder="Heslo" required>
       <button type="submit">Přihlásit se</button>
     </form>
   </div>
