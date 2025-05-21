@@ -1,17 +1,17 @@
 [
   {
     "id": 1,
-    "week": "2025-05-21",
+    "week": "2025-05-20",
     "amount": 500,
-    "paid": false,
+    "paid": true,
     "includeInTotal": false,
     "label": ""
   },
   {
     "id": 2,
-    "week": "2025-05-21",
+    "week": "2025-05-20",
     "amount": 503,
-    "paid": false,
+    "paid": true,
     "includeInTotal": true,
     "label": ""
   },
