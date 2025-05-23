@@ -106,3 +106,46 @@ function generateSchedule() {
 app.listen(PORT, () =>
   console.log(`▶ Server běží na http://localhost:${PORT}`)
 );
+/* ---------- VYTVOŘENÍ SPLÁTKY --------------- */
+app.post('/api/payment-create', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'admin')
+    return res.status(403).json({ error: 'Jen pro admina' });
+
+  const { date, amount, type } = req.body;
+  if (!date || !amount) return res.status(400).json({ error: 'Chybí date/amount' });
+
+  const file = 'data/payments.json';
+  const payments = JSON.parse(fs.readFileSync(file));
+
+  const newId = payments.reduce((m,p)=>p.id>m?p.id:m, 0) + 1;
+  payments.push({
+    id: newId,
+    date,
+    amount: Number(amount),
+    status: 'nezaplaceno',
+    type: type || 'splátka'
+  });
+
+  fs.writeFileSync(file, JSON.stringify(payments, null, 2));
+  res.json({ success: true, id: newId });
+});
+
+/* ------------- SMAZÁNÍ SPLÁTKY --------------- */
+app.post('/api/payment-delete', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'admin')
+    return res.status(403).json({ error: 'Jen pro admina' });
+
+  const { id } = req.body;
+  const file = 'data/payments.json';
+  let payments = JSON.parse(fs.readFileSync(file));
+  const before = payments.length;
+
+  payments = payments.filter(p => p.id !== Number(id));
+
+  if (payments.length === before)
+    return res.status(404).json({ error: 'Splátka nenalezena' });
+
+  fs.writeFileSync(file, JSON.stringify(payments, null, 2));
+  res.json({ success: true });
+});
+
