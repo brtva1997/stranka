@@ -1,1 +1,32 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Dashboard</title></head><body><h1>Dashboard</h1><div id='content'></div><script src='script.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Splátkový kalendář – Přehled</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dashboard-bg">
+  <div class="background-abstract"></div>
+  <div class="dashboard-container">
+    <h1>Splátkový kalendář</h1>
+    <div id="userInfo"></div>
+    <table class="payments-table" id="paymentsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Datum</th>
+          <th>Částka</th>
+          <th>Popis</th>
+          <th>Zaplaceno</th>
+          <th>Akce</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div class="total-row" id="totalRow"></div>
+    <button id="logoutBtn">Odhlásit se</button>
+  </div>
+  <script src="js/main.js"></script>
+</body>
+</html>
