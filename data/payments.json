@@ -1,0 +1,7 @@
+[
+  { "id": 1, "week": "2025-05-21", "amount": 500, "label": "",       "includeInTotal": false, "paid": false },
+  { "id": 2, "week": "2025-05-21", "amount": 503, "label": "",       "includeInTotal": true,  "paid": false },
+  { "id": 3, "week": "2025-05-23", "amount": 137, "label": "",       "includeInTotal": true,  "paid": false },
+  { "id": 4, "week": "2025-05-28", "amount": 225, "label": "",       "includeInTotal": true,  "paid": false },
+  { "id": 5, "week": "2025-06-04", "amount": 225, "label": "nájem",  "includeInTotal": false, "paid": false }
+]
