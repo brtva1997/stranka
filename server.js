@@ -69,8 +69,9 @@ app.post('/api/payment-update', requireLogin, (req, res) => {
 /* -------------------- SERVER START ------------------------- */
 app.listen(PORT, () => console.log(`▶ Server běží na http://localhost:${PORT}`));
 
-/* --------------- (volitelné) GENERÁTOR SPLÁTEK --------------
-// Spusť jen jednou pro vytvoření payments.json
+
+
+
 function generateSchedule() {
   const start = new Date('2025-05-23');
   const week  = 1000*60*60*24*7;
