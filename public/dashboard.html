@@ -1,77 +1,99 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!doctype html><html lang="cs">
+<!DOCTYPE html>
+<html lang="cs">
 <head>
-  <meta charset="utf-8">
-  <title>Splátky</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" data-bs-theme="dark">
+  <meta charset="UTF-8">
+  <title>Splátkový kalendář</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4">
-  <div class="container">
-    <h2 class="mb-4">Splátkový kalendář</h2>
-    <div class="d-flex justify-content-between">
-      <div id="welcome"></div>
-      <button id="logout" class="btn btn-secondary btn-sm">Odhlásit</button>
+<body>
+  <div class="card card-wide">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h2>Splátkový kalendář</h2>
+      <button id="logout" style="background:#555;">Odhlásit se</button>
     </div>
-    <table class="table table-dark table-striped mt-3" id="tbl">
-      <thead><tr><th>#</th><th>Datum</th><th>Částka (£)</th><th>Zaplaceno</th><th></th></tr></thead>
-      <tbody></tbody>
+
+    <div class="summary">
+      Celkem k úhradě: <strong>£ 4 000</strong> |
+      Zbývá splatit: <strong id="remain">–</strong>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Datum</th><th>Částka (£)</th><th>Typ</th><th>Stav</th><th>Akce</th>
+        </tr>
+      </thead>
+      <tbody id="tbl"></tbody>
     </table>
   </div>
 
-<script src="app.js"></script>
 <script>
 let ROLE = 'user';
 
 (async function init() {
-  // kdo jsem
-  const u = await fetch('/api/user'); if (!u.ok) return location.href='/login.html';
-  const userInfo = await u.json();
-  ROLE = userInfo.role;
-  welcome.textContent = `Uživatel: ${userInfo.username} (${ROLE})`;
+  // Info o uživateli
+  const uRes = await fetch('/api/user');
+  if (!uRes.ok) return location.href = '/index.html';
+  const user = await uRes.json();
+  ROLE = user.role;
 
-  // data
+  // Souhrn
+  await updateSummary();
+
+  // Platby
   const data = await fetch('/api/payments').then(r=>r.json());
-  const tbody = document.querySelector('#tbl tbody');
+  const tbody = document.getElementById('tbl');
 
   data.forEach(p => {
-    const tr = document.createElement('tr'); tr.dataset.id = p.id;
+    const tr = document.createElement('tr');
+    tr.dataset.id = p.id;
+
+    const typeLabel = p.type === 'nájem' ? '<small class="text-info">nájem</small>' : '';
 
     tr.innerHTML = `
       <td>${p.id}</td>
       <td>${p.date}</td>
       <td>${ROLE==='admin'
-            ? `<input type="number" class="form-control form-control-sm amount" value="${p.amount}" min="0">`
-            : p.amount}</td>
-      <td class="text-center">${ROLE==='admin'
-            ? `<input type="checkbox" class="form-check-input paid" ${p.status==='zaplaceno'?'checked':''}>`
-            : (p.status==='zaplaceno' ? '✔' : '✘')}</td>
+          ? `<input type="number" value="${p.amount}" style="width:80px;border-radius:6px;">`
+          : p.amount}</td>
+      <td>${typeLabel}</td>
+      <td class="form-check">${ROLE==='admin'
+          ? `<input type="checkbox" ${p.status==='zaplaceno'?'checked':''}>`
+          : (p.status==='zaplaceno'?'✔':'✘')}</td>
       <td>${ROLE==='admin'
-            ? '<button class="btn btn-sm btn-primary save">Uložit</button>'
-            : ''}</td>`;
+          ? '<button class="save" style="padding:.3rem .8rem;">Uložit</button>'
+          : ''}</td>`;
     tbody.appendChild(tr);
   });
 })();
 
-// klik na Uložit
-document.addEventListener('click', async e => {
+document.getElementById('tbl').addEventListener('click', async e => {
   if (!e.target.classList.contains('save')) return;
   const tr = e.target.closest('tr');
-  const id   = Number(tr.dataset.id);
-  const amt  = tr.querySelector('.amount').value;
-  const paid = tr.querySelector('.paid').checked ? 'zaplaceno' : 'nezaplaceno';
+  const id = Number(tr.dataset.id);
+  const amount = tr.querySelector('input[type="number"]').value;
+  const paid = tr.querySelector('input[type="checkbox"]').checked ? 'zaplaceno' : 'nezaplaceno';
 
   const r = await fetch('/api/payment-update', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ id, amount: amt, status: paid })
+    body: JSON.stringify({ id, amount, status: paid })
   });
-  if (r.ok) e.target.textContent='✓'; else alert('Chyba při ukládání');
+  if (r.ok) {
+    e.target.textContent = '✓';
+    await updateSummary();
+  } else alert('Uložení selhalo');
 });
 
-// logout
-logout.onclick = () => fetch('/logout', {method:'POST'}).then(()=>location.href='/index.html');
+async function updateSummary() {
+  const s = await fetch('/api/summary').then(r=>r.json());
+  document.getElementById('remain').textContent =
+    `£ ${s.remaining.toLocaleString('en-GB')}`;
+}
+
+// Logout
+document.getElementById('logout').onclick =
+  () => fetch('/logout',{method:'POST'}).then(()=>location.href='/index.html');
 </script>
-</body></html>
+</body>
+</html>
