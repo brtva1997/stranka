@@ -1,56 +1,74 @@
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
-const session = require('express-session');
-const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 3000;
-
-const usersFile = path.join(__dirname, 'data', 'users.json');
-const paymentsFile = path.join(__dirname, 'data', 'payments.json');
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static('public'));
+
 app.use(session({
-  secret: 'tajne-heslo',
+  secret: 'tajnyklic',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }));
 
-const readJSON = fp => fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, 'utf8')) : [];
-const writeJSON = (fp, data) => fs.writeFileSync(fp, JSON.stringify(data, null, 2));
+function loadUsers() {
+    return JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
+}
+
+function loadPayments() {
+    return JSON.parse(fs.readFileSync('./data/payments.json', 'utf-8'));
+}
+
+function savePayments(payments) {
+    fs.writeFileSync('./data/payments.json', JSON.stringify(payments, null, 2), 'utf8');
+}
+
+function requireLogin(req, res, next) {
+    if (!req.session.user) return res.status(401).json({error: "not authenticated"});
+    next();
+}
 
 app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const user = readJSON(usersFile).find(u => u.username === username && u.password === password);
-  if (!user) return res.send('Špatné přihlášení');
-  req.session.user = user;
-  res.redirect('/dashboard.html');
+    const { username, password } = req.body;
+    const users = loadUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        req.session.user = { username: user.username, role: user.role };
+        res.json({success: true, role: user.role});
+    } else {
+        res.status(401).json({success: false, message:"Bad credentials"});
+    }
 });
 
-app.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/index.html')));
-
-app.get('/api/payments', (req, res) => {
-  if (!req.session.user) return res.status(401).end();
-  const payments = readJSON(paymentsFile);
-  const paidTotal = payments.filter(p => p.includeInTotal && p.paid)
-                            .reduce((sum, p) => sum + p.amount, 0);
-  res.json({ payments, paidTotal, user: req.session.user });
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => res.json({success:true}));
 });
 
-app.post('/api/update-payment', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'admin') return res.status(403).end();
-  const { id, paid } = req.body;
-  const payments = readJSON(paymentsFile);
-  const pay = payments.find(p => p.id === id);
-  if (pay) {
-    pay.paid = paid;
-    writeJSON(paymentsFile, payments);
-    return res.json({ success: true });
-  }
-  res.status(404).end();
+app.get('/api/user', requireLogin, (req, res) => {
+    res.json(req.session.user);
 });
 
-app.listen(PORT, () => console.log(`Server běží na http://localhost:${PORT}`));
+app.get('/api/payments', requireLogin, (req, res) => {
+    res.json(loadPayments());
+});
+
+app.post('/api/payment-update', requireLogin, (req, res) => {
+    if (req.session.user?.role !== 'admin') return res.status(403).json({error: "nepovolené"});
+    const { id, paid } = req.body;
+    const payments = loadPayments();
+    let found = false;
+    payments.forEach(p => {
+        if (p.id === id) { p.paid = paid; found = true; }
+    });
+    if(found){
+        savePayments(payments);
+        res.json({success:true});
+    }else{
+        res.status(404).json({success:false, message:"Platba nenalezena"});
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => console.log("Server běží na http://localhost:" + PORT));
