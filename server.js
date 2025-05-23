@@ -51,7 +51,10 @@ app.get('/api/user', requireLogin, (req, res) => {
 });
 
 app.get('/api/payments', requireLogin, (req, res) => {
-    res.json(loadPayments());
+    // Vrací pouze platby přihlášeného uživatele
+    const all = loadPayments();
+    const user = req.session.user.username;
+    res.json(all.filter(p => p.username === user));
 });
 
 app.post('/api/payment-update', requireLogin, (req, res) => {
