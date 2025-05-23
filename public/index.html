@@ -2,38 +2,104 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Přihlášení | Splátkový kalendář</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Moje platby</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-bg">
-  <div class="background-abstract"></div>
-  <div class="login-container">
-    <h2>Splátkový kalendář</h2>
+<body>
+  <div class="container" id="loginContainer">
+    <h1>Přihlášení</h1>
     <form id="loginForm">
-      <input type="text" name="username" placeholder="Uživatelské jméno" required autofocus>
-      <input type="password" name="password" placeholder="Heslo" required>
-      <button type="submit">Přihlásit se</button>
+      <label for="username">Uživatelské jméno</label>
+      <input type="text" id="username" name="username" required>
+      <label for="password">Heslo</label>
+      <input type="password" id="password" name="password" required>
+      <input type="submit" value="Přihlásit se">
+      <div class="message error" id="loginError" style="display:none"></div>
     </form>
-    <div class="login-error" id="loginError"></div>
   </div>
+
+  <div class="container" id="paymentsContainer" style="display:none">
+    <button class="logout-btn" onclick="logout()">Odhlásit se</button>
+    <h1>Moje platby</h1>
+    <div class="summary">
+      <div>Celkem zaplaceno: <span class="paid" id="paidSum">0 Kč</span></div>
+      <div>Celkem nezaplaceno: <span class="unpaid" id="unpaidSum">0 Kč</span></div>
+    </div>
+    <div class="table-wrapper">
+      <table id="paymentsTable">
+        <thead>
+          <tr>
+            <th>Popis</th>
+            <th>Částka</th>
+            <th>Stav</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Platby se doplní JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <script>
+    async function checkLogin() {
+      const res = await fetch('/api/user');
+      if (res.ok) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('paymentsContainer').style.display = '';
+        loadPayments();
+      } else {
+        document.getElementById('loginContainer').style.display = '';
+        document.getElementById('paymentsContainer').style.display = 'none';
+      }
+    }
+
     document.getElementById('loginForm').onsubmit = async function(e) {
       e.preventDefault();
-      const body = {
-        username: this.username.value,
-        password: this.password.value
-      };
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
       const res = await fetch('/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(body)
+        body: JSON.stringify({username, password})
       });
       if (res.ok) {
-        location.href = "dashboard.html";
+        checkLogin();
       } else {
-        document.getElementById('loginError').textContent = "Špatné jméno nebo heslo.";
+        const data = await res.json();
+        document.getElementById('loginError').style.display = '';
+        document.getElementById('loginError').textContent = data.message || 'Chyba přihlášení';
       }
     };
+
+    async function loadPayments() {
+      const resUser = await fetch('/api/user');
+      const user = await resUser.json();
+      const res = await fetch('/api/payments');
+      const payments = await res.json();
+      let paidSum = 0, unpaidSum = 0;
+      let rows = '';
+      payments.forEach(p => {
+        if(p.paid) paidSum += p.amount;
+        else unpaidSum += p.amount;
+        rows += `<tr>
+          <td>${p.description}</td>
+          <td>${p.amount} Kč</td>
+          <td class="${p.paid ? 'status-paid' : 'status-unpaid'}">
+            ${p.paid ? 'Zaplaceno' : 'Nezaplaceno'}
+          </td>
+        </tr>`;
+      });
+      document.querySelector('#paymentsTable tbody').innerHTML = rows;
+      document.getElementById('paidSum').textContent = paidSum + ' Kč';
+      document.getElementById('unpaidSum').textContent = unpaidSum + ' Kč';
+    }
+
+    function logout() {
+      fetch('/logout').then(() => location.reload());
+    }
+
+    checkLogin();
   </script>
 </body>
 </html>
