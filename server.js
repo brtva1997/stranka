@@ -90,4 +90,4 @@ function generateSchedule() {
   }
   fs.writeFileSync('data/payments.json', JSON.stringify(out, null, 2));
 }
-*/
+
