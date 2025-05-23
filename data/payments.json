@@ -1,23 +1,7 @@
 [
-  {
-    "id": 1,
-    "username": "karel",
-    "description": "Členský příspěvek leden",
-    "amount": 500,
-    "paid": true
-  },
-  {
-    "id": 2,
-    "username": "karel",
-    "description": "Členský příspěvek únor",
-    "amount": 500,
-    "paid": false
-  },
-  {
-    "id": 3,
-    "username": "admin",
-    "description": "Členský příspěvek leden",
-    "amount": 500,
-    "paid": true
-  }
+  { "id": 1,  "date": "23/05/2025", "amount": 150, "status": "nezaplaceno" },
+  { "id": 2,  "date": "30/05/2025", "amount": 150, "status": "nezaplaceno" },
+  ...
+  { "id": 26, "date": "14/11/2025", "amount": 150, "status": "nezaplaceno" },
+  { "id": 27, "date": "21/11/2025", "amount": 100, "status": "nezaplaceno" }
 ]
