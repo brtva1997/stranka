@@ -6,94 +6,145 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="card card-wide">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h2>Splátkový kalendář</h2>
-      <button id="logout" style="background:#555;">Odhlásit se</button>
+  <div class="container">
+    <h1>Splátkový kalendář</h1>
+    <div class="user-info">
+      <span id="welcome"></span>
+      <button onclick="logout()">Odhlásit</button>
     </div>
 
-    <div class="summary">
-      Celkem k úhradě: <strong>£ 4 000</strong> |
-      Zbývá splatit: <strong id="remain">–</strong>
+    <div id="summary">
+      <p>Celková cílová částka: <strong>£4000</strong></p>
+      <p>Zbývá splatit: <strong id="remaining">–</strong></p>
     </div>
 
-    <table>
+    <div id="creator" style="display:none;margin-bottom:1.5rem;">
+      <h3>Nová splátka</h3>
+      <div class="form-row">
+        <input id="newDate" type="date">
+        <input id="newAmt" type="number" placeholder="Částka (£)">
+        <select id="newType">
+          <option value="splátka">splátka</option>
+          <option value="nájem">nájem</option>
+        </select>
+        <button id="addPay">Přidat</button>
+      </div>
+    </div>
+
+    <table id="tbl">
       <thead>
         <tr>
-          <th>#</th><th>Datum</th><th>Částka (£)</th><th>Typ</th><th>Stav</th><th>Akce</th>
+          <th>Datum</th>
+          <th>Částka (£)</th>
+          <th>Typ</th>
+          <th>Zaplaceno</th>
+          <th>Akce</th>
         </tr>
       </thead>
-      <tbody id="tbl"></tbody>
+      <tbody></tbody>
     </table>
   </div>
 
-<script>
-let ROLE = 'user';
+  <script>
+    let ROLE = '';
 
-(async function init() {
-  // Info o uživateli
-  const uRes = await fetch('/api/user');
-  if (!uRes.ok) return location.href = '/index.html';
-  const user = await uRes.json();
-  ROLE = user.role;
+    async function logout() {
+      await fetch('/logout');
+      location.href = '/';
+    }
 
-  // Souhrn
-  await updateSummary();
+    async function load() {
+      const u = await fetch('/api/user');
+      const user = await u.json();
+      ROLE = user.role;
+      welcome.innerText = 'Přihlášen jako: ' + user.name;
 
-  // Platby
-  const data = await fetch('/api/payments').then(r=>r.json());
-  const tbody = document.getElementById('tbl');
+      if (ROLE === 'admin') creator.style.display = 'block';
 
-  data.forEach(p => {
-    const tr = document.createElement('tr');
-    tr.dataset.id = p.id;
+      const r = await fetch('/api/payments');
+      const data = await r.json();
 
-    const typeLabel = p.type === 'nájem' ? '<small class="text-info">nájem</small>' : '';
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = '';
 
-    tr.innerHTML = `
-      <td>${p.id}</td>
-      <td>${p.date}</td>
-      <td>${ROLE==='admin'
-          ? `<input type="number" value="${p.amount}" style="width:80px;border-radius:6px;">`
-          : p.amount}</td>
-      <td>${typeLabel}</td>
-      <td class="form-check">${ROLE==='admin'
-          ? `<input type="checkbox" ${p.status==='zaplaceno'?'checked':''}>`
-          : (p.status==='zaplaceno'?'✔':'✘')}</td>
-      <td>${ROLE==='admin'
-          ? '<button class="save" style="padding:.3rem .8rem;">Uložit</button>'
-          : ''}</td>`;
-    tbody.appendChild(tr);
-  });
-})();
+      let paidSum = 0;
+      let totalToPay = 0;
 
-document.getElementById('tbl').addEventListener('click', async e => {
-  if (!e.target.classList.contains('save')) return;
-  const tr = e.target.closest('tr');
-  const id = Number(tr.dataset.id);
-  const amount = tr.querySelector('input[type="number"]').value;
-  const paid = tr.querySelector('input[type="checkbox"]').checked ? 'zaplaceno' : 'nezaplaceno';
+      for (let row of data) {
+        const tr = document.createElement('tr');
+        tr.dataset.id = row.id;
 
-  const r = await fetch('/api/payment-update', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ id, amount, status: paid })
-  });
-  if (r.ok) {
-    e.target.textContent = '✓';
-    await updateSummary();
-  } else alert('Uložení selhalo');
-});
+        const isPaid = row.status === 'zaplaceno';
+        const isRent = row.type === 'nájem';
+        if (!isRent) totalToPay += row.amount;
+        if (isPaid && !isRent) paidSum += row.amount;
 
-async function updateSummary() {
-  const s = await fetch('/api/summary').then(r=>r.json());
-  document.getElementById('remain').textContent =
-    `£ ${s.remaining.toLocaleString('en-GB')}`;
-}
+        tr.innerHTML = `
+          <td>${row.date}</td>
+          <td><input class="amt" type="number" value="${row.amount}" ${ROLE!=='admin'?'disabled':''}></td>
+          <td>${isRent ? 'nájem' : 'splátka'}</td>
+          <td><input class="chk" type="checkbox" ${isPaid ? 'checked' : ''} ${ROLE!=='admin'?'disabled':''}></td>
+          <td>
+            ${ROLE === 'admin' ? `
+              <button class="save">Uložit</button>
+              <button class="del">Smazat</button>
+            ` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
 
-// Logout
-document.getElementById('logout').onclick =
-  () => fetch('/logout',{method:'POST'}).then(()=>location.href='/index.html');
-</script>
+      document.getElementById('remaining').innerText = '£' + (4000 - paidSum).toFixed(2);
+    }
+
+    tbl.addEventListener('click', async e => {
+      const tr = e.target.closest('tr');
+      const id = +tr.dataset.id;
+
+      if (e.target.classList.contains('save')) {
+        const amount = tr.querySelector('.amt').value;
+        const status = tr.querySelector('.chk').checked;
+        const res = await fetch('/api/payment-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, amount, status })
+        });
+        if (res.ok) load();
+        else alert('Chyba při ukládání');
+      }
+
+      if (e.target.classList.contains('del')) {
+        if (!confirm('Opravdu smazat?')) return;
+        const res = await fetch('/api/payment-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) load();
+        else alert('Chyba při mazání');
+      }
+    });
+
+    document.getElementById('addPay').onclick = async () => {
+      const date = newDate.value;
+      const amount = newAmt.value;
+      const type = newType.value;
+      if (!date || !amount) return alert('Vyplň všechna pole');
+
+      const res = await fetch('/api/payment-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: new Date(date).toLocaleDateString('cs-CZ'),
+          amount: +amount,
+          type
+        })
+      });
+      if (res.ok) load();
+      else alert('Nepodařilo se přidat splátku');
+    };
+
+    load();
+  </script>
 </body>
 </html>
