@@ -1,32 +1,74 @@
-<!DOCTYPE html>
-<html lang="cs">
+<!doctype html><html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>Splátkový kalendář – Přehled</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <title>Splátky</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" data-bs-theme="dark">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-bg">
-  <div class="background-abstract"></div>
-  <div class="dashboard-container">
-    <h1>Splátkový kalendář</h1>
-    <div id="userInfo"></div>
-    <table class="payments-table" id="paymentsTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Datum</th>
-          <th>Částka</th>
-          <th>Popis</th>
-          <th>Zaplaceno</th>
-          <th>Akce</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
+<body class="p-4">
+  <div class="container">
+    <h2 class="mb-4">Splátkový kalendář</h2>
+    <div class="d-flex justify-content-between">
+      <div id="welcome"></div>
+      <button id="logout" class="btn btn-secondary btn-sm">Odhlásit</button>
+    </div>
+    <table class="table table-dark table-striped mt-3" id="tbl">
+      <thead><tr><th>#</th><th>Datum</th><th>Částka (£)</th><th>Zaplaceno</th><th></th></tr></thead>
+      <tbody></tbody>
     </table>
-    <div class="total-row" id="totalRow"></div>
-    <button id="logoutBtn">Odhlásit se</button>
   </div>
-  <script src="js/main.js"></script>
-</body>
-</html>
+
+<script src="app.js"></script>
+<script>
+let ROLE = 'user';
+
+(async function init() {
+  // kdo jsem
+  const u = await fetch('/api/user'); if (!u.ok) return location.href='/login.html';
+  const userInfo = await u.json();
+  ROLE = userInfo.role;
+  welcome.textContent = `Uživatel: ${userInfo.username} (${ROLE})`;
+
+  // data
+  const data = await fetch('/api/payments').then(r=>r.json());
+  const tbody = document.querySelector('#tbl tbody');
+
+  data.forEach(p => {
+    const tr = document.createElement('tr'); tr.dataset.id = p.id;
+
+    tr.innerHTML = `
+      <td>${p.id}</td>
+      <td>${p.date}</td>
+      <td>${ROLE==='admin'
+            ? `<input type="number" class="form-control form-control-sm amount" value="${p.amount}" min="0">`
+            : p.amount}</td>
+      <td class="text-center">${ROLE==='admin'
+            ? `<input type="checkbox" class="form-check-input paid" ${p.status==='zaplaceno'?'checked':''}>`
+            : (p.status==='zaplaceno' ? '✔' : '✘')}</td>
+      <td>${ROLE==='admin'
+            ? '<button class="btn btn-sm btn-primary save">Uložit</button>'
+            : ''}</td>`;
+    tbody.appendChild(tr);
+  });
+})();
+
+// klik na Uložit
+document.addEventListener('click', async e => {
+  if (!e.target.classList.contains('save')) return;
+  const tr = e.target.closest('tr');
+  const id   = Number(tr.dataset.id);
+  const amt  = tr.querySelector('.amount').value;
+  const paid = tr.querySelector('.paid').checked ? 'zaplaceno' : 'nezaplaceno';
+
+  const r = await fetch('/api/payment-update', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id, amount: amt, status: paid })
+  });
+  if (r.ok) e.target.textContent='✓'; else alert('Chyba při ukládání');
+});
+
+// logout
+logout.onclick = () => fetch('/logout', {method:'POST'}).then(()=>location.href='/login.html');
+</script>
+</body></html>
