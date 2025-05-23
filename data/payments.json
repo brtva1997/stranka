@@ -1,7 +1,6 @@
 [
   { "id": 1,  "date": "23/05/2025", "amount": 150, "status": "nezaplaceno" },
   { "id": 2,  "date": "30/05/2025", "amount": 150, "status": "nezaplaceno" },
-  ...
   { "id": 26, "date": "14/11/2025", "amount": 150, "status": "nezaplaceno" },
   { "id": 27, "date": "21/11/2025", "amount": 100, "status": "nezaplaceno" }
 ]
