@@ -2,37 +2,78 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Přihlášení</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Splátky</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:1rem;">Splátkový kalendář</h2>
-    <form id="loginForm">
-      <input id="username" placeholder="Uživatelské jméno" required>
-      <input id="password" type="password" placeholder="Heslo" required>
-      <button>Přihlásit se</button>
-    </form>
-    <p id="error" style="color:#f66;text-align:center;"></p>
+  <div id="app">
+    <div id="login">
+      <h2>Přihlášení</h2>
+      <input id="username" placeholder="uživatel" />
+      <input id="password" type="password" placeholder="heslo" />
+      <button onclick="login()">Přihlásit</button>
+    </div>
+    <div id="table" style="display:none">
+      <h2>Splátky</h2>
+      <table></table>
+    </div>
   </div>
+  <script>
+    let userRole = null;
 
-<script>
-const form = document.getElementById('loginForm');
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const body = {
-    username: username.value.trim(),
-    password: password.value.trim()
-  };
-  const r = await fetch('/login', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  if (r.ok) location.href = '/dashboard.html';
-  else document.getElementById('error').textContent =
-         (await r.json()).error || 'Přihlášení selhalo';
-});
-</script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const res = await fetch('/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        userRole = data.role;
+        document.getElementById('login').style.display = 'none';
+        loadPayments();
+      } else {
+        alert('Chyba přihlášení');
+      }
+    }
+
+    async function loadPayments() {
+      const res = await fetch('/payments');
+      const data = await res.json();
+      const table = document.querySelector('table');
+      table.innerHTML = '<tr><th>Datum</th><th>Částka</th><th>Splaceno</th></tr>';
+      data.payments.forEach((p, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${p.date}</td>
+          <td contenteditable=${userRole === 'admin'} onblur="updateAmount(${i}, this)">${p.amount}</td>
+          <td>
+            ${userRole === 'admin' ? `<input type="checkbox" ${p.paid ? 'checked' : ''} onchange="togglePaid(${i}, this)">` : (p.paid ? '✔️' : '❌')}
+          </td>
+        `;
+        table.appendChild(row);
+      });
+      document.getElementById('table').style.display = '';
+    }
+
+    async function updateAmount(index, cell) {
+      const amount = parseFloat(cell.innerText);
+      const res = await fetch('/payments/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index, amount, paid: null })
+      });
+    }
+
+    async function togglePaid(index, checkbox) {
+      const res = await fetch('/payments/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index, amount: null, paid: checkbox.checked })
+      });
+    }
+  </script>
 </body>
 </html>
