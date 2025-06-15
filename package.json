@@ -1,7 +1,7 @@
 {
   "name": "loan-tracker",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app.json",
   "type": "module",
   "scripts": {
     "start": "node app.js"
