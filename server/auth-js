@@ -1,5 +1,4 @@
 import express from 'express';
-
 const router = express.Router();
 
 const USERS = {
@@ -12,7 +11,7 @@ router.post('/', (req, res) => {
   if (USERS[username] === password) {
     res.json({ role: username });
   } else {
-    res.status(401).json({ error: 'Neplatné přihlašovací údaje' });
+    res.status(401).json({ error: 'Neplatné přihlášení' });
   }
 });
 
