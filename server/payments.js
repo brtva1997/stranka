@@ -4,7 +4,24 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs/promises';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const dataPath = path.join(__dirname, 'data.json');
+
+router.get('/', async (req, res) => {
+  try {
+    const raw = await fs.readFile(dataPath, 'utf-8');
+    const data = JSON.parse(raw);
+    res.json(data);
+  } catch (err) {
+    console.error('❌ Chyba při načítání splátek:', err.message);
+    res.status(500).json({ error: 'Nepodařilo se načíst splátky.' });
+  }
+});
 const router = express.Router();
 
 // Cesta k souboru data.json
@@ -50,5 +67,9 @@ router.post('/update', async (req, res) => {
     res.status(500).json({ error: 'Nepodařilo se aktualizovat data.' });
   }
 });
+if (!data || !data.payments) {
+  alert('Nepodařilo se načíst data ze serveru.');
+  return;
+}
 
 export default router;
