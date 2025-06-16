@@ -1,80 +1,53 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>Splátky</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Tracker</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-  <div id="hearts-container"></div>
 <body>
   <div id="app">
     <div id="login">
       <h2>Přihlášení</h2>
-      <input id="username" placeholder="uživatel" />
-      <input id="password" type="password" placeholder="heslo" />
+      <input type="text" id="username" placeholder="Uživatelské jméno" />
+      <input type="password" id="password" placeholder="Heslo" />
       <button onclick="login()">Přihlásit</button>
     </div>
-    <div id="table" style="display:none">
+
+    <div id="table" style="display: none;">
       <h2>Splátky</h2>
-      <table></table>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Částka</th>
+            <th>Zaplaceno</th>
+          </tr>
+        </thead>
+        <tbody id="payments-body"></tbody>
+      </table>
     </div>
   </div>
+
+  <!-- ❤️ Padající srdíčka -->
+  <div id="hearts-container"></div>
+
+  <script src="requests.js"></script>
   <script>
-    let userRole = null;
-
-    async function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const res = await fetch('/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        userRole = data.role;
-        document.getElementById('login').style.display = 'none';
-        loadPayments();
-      } else {
-        alert('Chyba přihlášení');
-      }
+    // Efekt srdíček
+    const container = document.getElementById("hearts-container");
+    function spawnHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 10 + "px";
+      heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+      container.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
     }
-
-    async function loadPayments() {
-      const res = await fetch('/payments');
-      const data = await res.json();
-      const table = document.querySelector('table');
-      table.innerHTML = '<tr><th>Datum</th><th>Částka</th><th>Splaceno</th></tr>';
-      data.payments.forEach((p, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${p.date}</td>
-          <td contenteditable=${userRole === 'admin'} onblur="updateAmount(${i}, this)">${p.amount}</td>
-          <td>
-            ${userRole === 'admin' ? `<input type="checkbox" ${p.paid ? 'checked' : ''} onchange="togglePaid(${i}, this)">` : (p.paid ? '✔️' : '❌')}
-          </td>
-        `;
-        table.appendChild(row);
-      });
-      document.getElementById('table').style.display = '';
-    }
-
-    async function updateAmount(index, cell) {
-      const amount = parseFloat(cell.innerText);
-      const res = await fetch('/payments/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index, amount, paid: null })
-      });
-    }
-
-    async function togglePaid(index, checkbox) {
-      const res = await fetch('/payments/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index, amount: null, paid: checkbox.checked })
-      });
-    }
+    setInterval(spawnHeart, 400);
   </script>
 </body>
 </html>
