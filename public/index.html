@@ -43,6 +43,13 @@
 
   <script src="requests.js"></script>
   <script>
+    function logout() {
+  document.getElementById('login').style.display = '';
+  document.getElementById('table').style.display = 'none';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+}
+
     // Efekt srdíček
     const container = document.getElementById("hearts-container");
     function spawnHeart() {
