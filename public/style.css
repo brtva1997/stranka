@@ -3,7 +3,6 @@
   --card: #1a1a1a;
   --text: #f2f2f2;
   --accent: #4caf50;
-  --danger: #ff5252;
   --border: #333;
 }
 
@@ -16,35 +15,39 @@
 body {
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+  background: var(--bg);
   color: var(--text);
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 1rem;
+  align-items: flex-start;
+  padding: 2rem 1rem;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, #444 0%, transparent 70%);
-  animation: rotate 20s linear infinite;
-  opacity: 0.08;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  animation: pulse 12s ease-in-out infinite;
+  opacity: 0.05;
   z-index: 0;
+  pointer-events: none;
+  transform: rotate(30deg);
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1) rotate(30deg);
+    opacity: 0.05;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: scale(1.2) rotate(60deg);
+    opacity: 0.12;
   }
 }
 
@@ -52,7 +55,7 @@ body::before {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 500px;
+  max-width: 1200px;
 }
 
 #login,
@@ -60,20 +63,22 @@ body::before {
   background-color: var(--card);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-input, button {
-  padding: 0.8rem;
+input,
+button {
+  padding: 0.75rem;
   font-size: 1rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   background-color: #252525;
   color: var(--text);
+  width: 100%;
 }
 
 button {
@@ -92,11 +97,13 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
-  padding: 0.6rem;
+th,
+td {
+  padding: 0.8rem;
   border: 1px solid var(--border);
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  word-break: break-word;
 }
 
 td[contenteditable="true"] {
@@ -104,16 +111,14 @@ td[contenteditable="true"] {
   outline: none;
 }
 
-@media (max-width: 600px) {
-  #login, #table {
-    padding: 1.5rem;
+@media (max-width: 768px) {
+  #login,
+  #table {
+    padding: 1.25rem;
   }
 
-  input, button {
+  th,
+  td {
     font-size: 0.95rem;
-  }
-
-  th, td {
-    font-size: 0.9rem;
   }
 }
