@@ -17,26 +17,32 @@ async function login() {
 }
 
 async function loadPayments(role) {
-  const today = new Date();
-  const nearestIndex = data.payments.reduce((closestIndex, payment, index) => {
-  const paymentDate = new Date(payment.date);
-  if (paymentDate < today) return closestIndex;
-  const closestDate = new Date(data.payments[closestIndex]?.date || '9999-12-31');
-  return paymentDate < closestDate ? index : closestIndex;
-  }, -1);
-  
   const res = await fetch('/payments');
   const data = await res.json();
   const body = document.getElementById('payments-body');
   body.innerHTML = '';
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date();
+  let nearestIndex = -1;
+  let minDiff = Infinity;
+
+  // Najdi nejbližší budoucí nesplacenou splátku
+  data.payments.forEach((payment, index) => {
+    const paymentDate = new Date(payment.date);
+    if (paymentDate >= today && !payment.paid) {
+      const diff = paymentDate - today;
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearestIndex = index;
+      }
+    }
+  });
 
   data.payments.forEach((payment, index) => {
     const row = document.createElement('tr');
 
-    if (payment.date === today) {
-      row.classList.add('today-highlight');
+    if (index === nearestIndex) {
+      row.classList.add('nearest-highlight');
     }
 
     const dateCell = document.createElement('td');
@@ -75,8 +81,8 @@ async function updatePayment(index, amount, paid) {
 }
 
 function logout() {
-  document.getElementById('table').style.display = 'none';
   document.getElementById('login').style.display = '';
+  document.getElementById('table').style.display = 'none';
   document.getElementById('username').value = '';
   document.getElementById('password').value = '';
 }
