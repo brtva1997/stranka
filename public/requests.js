@@ -79,7 +79,7 @@ async function updatePayment(index, amount, paid) {
     body: JSON.stringify({ index, amount, paid })
   });
 }
-
+console.log("Nearest index:", nearestIndex);
 function logout() {
   document.getElementById('login').style.display = '';
   document.getElementById('table').style.display = 'none';
