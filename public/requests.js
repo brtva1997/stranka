@@ -26,10 +26,10 @@ async function loadPayments(role) {
   let nearestIndex = -1;
   let minDiff = Infinity;
 
-  // Najdi nejbližší budoucí nesplacenou splátku
+  // Najdi nejbližší budoucí NESPLACENOU splátku
   data.payments.forEach((payment, index) => {
     const paymentDate = new Date(payment.date);
-    if (paymentDate >= today && !payment.paid) {
+    if (!payment.paid && paymentDate >= today) {
       const diff = paymentDate - today;
       if (diff < minDiff) {
         minDiff = diff;
@@ -38,10 +38,12 @@ async function loadPayments(role) {
     }
   });
 
+  console.log("Nearest index:", nearestIndex); // 🛠 Pro ladění
+
   data.payments.forEach((payment, index) => {
     const row = document.createElement('tr');
 
-    if (index === nearestIndex) {
+    if (index === nearestIndex && nearestIndex !== -1) {
       row.classList.add('nearest-highlight');
     }
 
@@ -79,7 +81,7 @@ async function updatePayment(index, amount, paid) {
     body: JSON.stringify({ index, amount, paid })
   });
 }
-console.log("Nearest index:", nearestIndex);
+
 function logout() {
   document.getElementById('login').style.display = '';
   document.getElementById('table').style.display = 'none';
