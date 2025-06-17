@@ -17,6 +17,14 @@ async function login() {
 }
 
 async function loadPayments(role) {
+  const today = new Date();
+  const nearestIndex = data.payments.reduce((closestIndex, payment, index) => {
+  const paymentDate = new Date(payment.date);
+  if (paymentDate < today) return closestIndex;
+  const closestDate = new Date(data.payments[closestIndex]?.date || '9999-12-31');
+  return paymentDate < closestDate ? index : closestIndex;
+  }, -1);
+  
   const res = await fetch('/payments');
   const data = await res.json();
   const body = document.getElementById('payments-body');
