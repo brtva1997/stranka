@@ -163,14 +163,22 @@ td[contenteditable="true"] {
 
 /* 💡 Zvýraznění nejbližší nesplacené splátky */
 .nearest-highlight {
-  color: #fff !important;
-  border-left: 5px solid #4caf50;
-  animation: pulse-glow 1.5s ease-in-out infinite alternate;
+  background-color: lime !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-left: 8px solid #00ff00 !important;
+  animation: blink-glow 1s infinite alternate;
 }
-tr.nearest-highlight td {
-  font-weight: bold;
-  background-color: #1e4620 !important;
+
+@keyframes blink-glow {
+  from {
+    box-shadow: 0 0 10px lime;
+  }
+  to {
+    box-shadow: 0 0 20px lime;
+  }
 }
+
 @keyframes pulse-glow {
   from {
     box-shadow: 0 0 6px rgba(76, 175, 80, 0.2);
