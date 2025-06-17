@@ -163,9 +163,10 @@ td[contenteditable="true"] {
 
 /* 💡 Zvýraznění nejbližší nesplacené splátky */
 .nearest-highlight {
-  background: linear-gradient(90deg, rgba(76, 175, 80, 0.08), rgba(76, 175, 80, 0.15)) !important;
-  animation: pulse-glow 2.5s ease-in-out infinite alternate;
-  border-left: 3px solid var(--accent);
+  background-color: rgba(76, 175, 80, 0.2) !important;
+  color: #fff !important;
+  border-left: 5px solid #4caf50;
+  animation: pulse-glow 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes pulse-glow {
