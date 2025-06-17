@@ -16,7 +16,10 @@
     </div>
 
     <div id="table" style="display: none;">
-      <h2>Splátky</h2>
+      <div class="table-header">
+        <h2>Seznam splátek</h2>
+        <button onclick="logout()">Odhlásit</button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -26,30 +29,15 @@
           </tr>
         </thead>
         <tbody id="payments-body"></tbody>
-        <div id="table" style="display: none;">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>Seznam splátek</h2>
-    <button onclick="logout()">Odhlásit se</button>
-  </div>
-  <!-- ... zbytek tabulky ... -->
-</div>
-
       </table>
     </div>
   </div>
 
-  <!-- ❤️ Padající srdíčka -->
+  <!-- 💖 Padající srdíčka -->
   <div id="hearts-container"></div>
 
   <script src="requests.js"></script>
   <script>
-    function logout() {
-  document.getElementById('login').style.display = '';
-  document.getElementById('table').style.display = 'none';
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
-}
-
     // Efekt srdíček
     const container = document.getElementById("hearts-container");
     function spawnHeart() {

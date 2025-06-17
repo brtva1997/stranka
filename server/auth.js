@@ -1,17 +1,18 @@
 import express from 'express';
 const router = express.Router();
 
-const USERS = {
-  user: 'userpass',
-  admin: 'adminpass'
+const users = {
+  admin: { password: 'admin', role: 'admin' },
+  uzivatel: { password: 'test', role: 'user' }
 };
 
 router.post('/', (req, res) => {
   const { username, password } = req.body;
-  if (USERS[username] === password) {
-    res.json({ role: username });
+  const user = users[username];
+  if (user && user.password === password) {
+    res.json({ role: user.role });
   } else {
-    res.status(401).json({ error: 'Neplatné přihlášení' });
+    res.status(401).json({ error: 'Neplatné údaje' });
   }
 });
 
