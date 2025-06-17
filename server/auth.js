@@ -3,7 +3,7 @@ const router = express.Router();
 
 const users = {
   admin: { password: 'admin', role: 'admin' },
-  uzivatel: { password: 'test', role: 'user' }
+  asd: { password: 'asd', role: 'user' }
 };
 
 router.post('/', (req, res) => {
