@@ -1,15 +1,15 @@
-// server.js
 const express = require('express');
 const app = express();
 const path = require('path');
 
 const port = process.env.PORT || 3000;
 
-// Slouží statický obsah ze složky s tvými soubory
-app.use(express.static(path.join(__dirname)));
+// Slouží statické soubory z ./public
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Při jakémkoli jiném požadavku vrátí index.html z ./public
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, () => {
