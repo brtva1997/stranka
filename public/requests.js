@@ -37,14 +37,17 @@ async function loadPayments(role) {
     }
   });
 
-  console.log("Nearest index:", nearestIndex);
+  let total = 0;
+  let paid = 0;
 
   data.payments.forEach((payment, index) => {
     const row = document.createElement('tr');
 
     if (index === nearestIndex && nearestIndex !== -1) {
-      console.log("Přidávám .nearest-highlight na řádek:", index);
       row.classList.add('nearest-highlight');
+    }
+    if (payment.paid) {
+      row.classList.add('paid');
     }
 
     const dateCell = document.createElement('td');
@@ -55,15 +58,27 @@ async function loadPayments(role) {
     if (role === 'admin') amountCell.contentEditable = true;
 
     const paidCell = document.createElement('td');
-    paidCell.innerHTML = `<input type="checkbox" ${payment.paid ? 'checked' : ''}>`;
-    paidCell.querySelector('input').disabled = role !== 'admin';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = payment.paid;
+    checkbox.disabled = role !== 'admin';
+    paidCell.appendChild(checkbox);
+
+    // fajfka ✅ vedle checkboxu
+    if (payment.paid) {
+      const tick = document.createElement('span');
+      tick.textContent = ' ✅';
+      paidCell.appendChild(tick);
+    }
 
     if (role === 'admin') {
       amountCell.addEventListener('blur', () => {
-        updatePayment(index, +amountCell.textContent, payment.paid);
+        const newAmount = parseFloat(amountCell.textContent) || 0;
+        updatePayment(index, newAmount, checkbox.checked);
       });
-      paidCell.querySelector('input').addEventListener('change', () => {
-        updatePayment(index, +amountCell.textContent, paidCell.querySelector('input').checked);
+      checkbox.addEventListener('change', () => {
+        const newAmount = parseFloat(amountCell.textContent) || 0;
+        updatePayment(index, newAmount, checkbox.checked);
       });
     }
 
@@ -71,15 +86,73 @@ async function loadPayments(role) {
     row.appendChild(amountCell);
     row.appendChild(paidCell);
     body.appendChild(row);
+
+    total += payment.amount;
+    if (payment.paid) paid += payment.amount;
   });
+
+  document.getElementById('total-amount').textContent = total;
+  document.getElementById('paid-amount').textContent = paid;
 }
 
 async function updatePayment(index, amount, paid) {
-  await fetch('/payments/update', {
+  const row = document.querySelectorAll('#payments-body tr')[index];
+
+  const res = await fetch('/payments/update', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ index, amount, paid })
   });
+
+  const result = await res.json();
+  if (result.success) {
+    // Vizuální odezva
+    row.style.transition = 'background-color 0.5s ease';
+    row.style.backgroundColor = '#2e7d32';
+    setTimeout(() => {
+      row.style.backgroundColor = '';
+    }, 800);
+
+    // Dynamický styling
+    row.classList.toggle('paid', paid);
+
+    // Fajfka ✅ ve sloupci
+    const paidCell = row.children[2];
+    if (paid) {
+      if (!paidCell.textContent.includes('✅')) {
+        paidCell.innerHTML += ' ✅';
+      }
+    } else {
+      paidCell.innerHTML = '';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = false;
+      checkbox.addEventListener('change', () => {
+        const newAmount = parseFloat(row.children[1].textContent) || 0;
+        updatePayment(index, newAmount, checkbox.checked);
+      });
+      paidCell.appendChild(checkbox);
+    }
+
+    // Přepočet souhrnu
+    recalculateSummary();
+  }
+}
+
+function recalculateSummary() {
+  const rows = document.querySelectorAll('#payments-body tr');
+  let total = 0;
+  let paid = 0;
+
+  rows.forEach(row => {
+    const amount = parseFloat(row.children[1].textContent) || 0;
+    const checked = row.querySelector('input[type=checkbox]')?.checked;
+    total += amount;
+    if (checked) paid += amount;
+  });
+
+  document.getElementById('total-amount').textContent = total;
+  document.getElementById('paid-amount').textContent = paid;
 }
 
 function logout() {
