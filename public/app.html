@@ -6,20 +6,42 @@
   <title>Moje aplikace</title>
   <style>
     body {
-      min-height: 100vh;
-      background: linear-gradient(to bottom, #18001f 0%, #0b0016 100%);
-      background-attachment: fixed;
-      font-family: sans-serif;
-      color: #f0f0f0;
+      margin: 0;
       padding: 2rem;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #300016, #ff0099 80%);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
     }
-    table, th, td {
-      border: 1px solid #444;
+
+    h2 {
+      color: #ff80d5;
+      text-shadow: 0 0 10px #ff1493;
+    }
+
+    #summary {
+      margin-bottom: 1rem;
+    }
+
+    strong {
+      color: #ffb4ec;
+    }
+
+    table {
+      width: 100%;
       border-collapse: collapse;
-      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(255, 112, 196, 0.2);
     }
-    .paid { color: lime; }
-    .unpaid { color: tomato; }
+
+    th, td {
+      border: 1px solid #ff66cc;
+      padding: 0.6rem;
+      text-align: center;
+    }
+
+    .paid { color: #90ff90; }
+    .unpaid { color: #ff9494; }
   </style>
 
   <script>
@@ -35,28 +57,25 @@
 <body>
   <h2>💸 Přehled splátek</h2>
   <div id="summary">
-    <div>Zaplaceno: <strong id="paidAmount">...</strong> Kč</div>
-    <div>Zbývá zaplatit: <strong id="unpaidAmount">...</strong> Kč</div>
+    <div>Zaplaceno: <strong id="paidAmount">…</strong> Kč</div>
+    <div>Zbývá zaplatit: <strong id="unpaidAmount">…</strong> Kč</div>
   </div>
 
   <table>
     <thead><tr><th>#</th><th>Datum</th><th>Stav</th><th>Částka</th></tr></thead>
     <tbody>
       <tr class="paid" data-amount="1000"><td>1</td><td>2024-01-01</td><td>✔</td><td>1000</td></tr>
-      <tr class="paid" data-amount="1000"><td>2</td><td>2024-02-01</td><td>✔</td><td>1000</td></tr>
-      <tr class="paid" data-amount="1000"><td>3</td><td>2024-03-01</td><td>✔</td><td>1000</td></tr>
-      <tr class="unpaid" data-amount="1000"><td>4</td><td>2024-04-01</td><td></td><td>1000</td></tr>
-      <tr class="unpaid" data-amount="1000"><td>5</td><td>2024-05-01</td><td></td><td>1000</td></tr>
+      <tr class="paid" data-amount="1500"><td>2</td><td>2024-02-01</td><td>✔</td><td>1500</td></tr>
+      <tr class="unpaid" data-amount="1200"><td>3</td><td>2024-03-01</td><td></td><td>1200</td></tr>
+      <tr class="unpaid" data-amount="1800"><td>4</td><td>2024-04-01</td><td></td><td>1800</td></tr>
     </tbody>
   </table>
 
   <script>
     const paidRows = [...document.querySelectorAll('tr.paid')];
     const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
-
-    const paidAmount = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-    const unpaidAmount = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-
+    const paidAmount = paidRows.reduce((sum, r) => sum + Number(r.dataset.amount), 0);
+    const unpaidAmount = unpaidRows.reduce((sum, r) => sum + Number(r.dataset.amount), 0);
     document.getElementById('paidAmount').textContent = paidAmount.toLocaleString();
     document.getElementById('unpaidAmount').textContent = unpaidAmount.toLocaleString();
   </script>

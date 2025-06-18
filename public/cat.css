@@ -1,23 +1,24 @@
 body {
   margin: 0;
-  background: linear-gradient(to bottom, #18001f 0%, #0b0016 100%);
+  background: linear-gradient(to bottom, #33001f, #ff1199);
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   overflow: hidden;
+  touch-action: manipulation;
 }
 
 #cat {
   width: 240px;
   cursor: pointer;
   transition: transform 0.3s ease, filter 0.4s ease;
-  filter: drop-shadow(0 0 12px #cb80ff);
+  filter: brightness(1) drop-shadow(0 0 10px #ff80d5);
 }
 
 #cat:hover {
-  transform: scale(1.05) rotate(1deg);
-  filter: brightness(1.2) drop-shadow(0 0 18px #ff70c4);
+  transform: scale(1.06);
+  filter: brightness(1.2) drop-shadow(0 0 18px #ffb4ec);
 }
 
 .bubble {
@@ -27,10 +28,11 @@ body {
   transform: translateX(-50%);
   background: #ffb4ec;
   color: #300010;
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1rem;
   border-radius: 16px;
-  font-weight: bold;
   font-family: sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
   opacity: 0;
   transition: opacity 0.4s ease;
   box-shadow: 0 0 8px rgba(255, 112, 196, 0.5);
