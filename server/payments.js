@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const filePath = path.join(__dirname, 'data.json');
+const filePath = path.resolve('server/data.json');
 
 // Vrací seznam splátek
 router.get('/', (req, res) => {
