@@ -1,6 +1,7 @@
 const cat = document.getElementById('cat');
-const bubble = document.getElementById('bubble');
+const catContainer = document.getElementById('cat-container');
 const heartMsg = document.getElementById('heart-msg');
+const app = document.getElementById('app');
 let clickCount = 0;
 let isTongue = false;
 
@@ -9,24 +10,27 @@ cat.addEventListener('click', () => {
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  cat.style.transform = 'scale(1.08)';
-  setTimeout(() => cat.style.transform = 'scale(1)', 250);
+  // Vygeneruj 1–3 bubliny MŇAU
+  if (clickCount < 10) {
+    const meowCount = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < meowCount; i++) {
+      const bubble = document.createElement('div');
+      bubble.className = 'meow-pop';
+      bubble.textContent = 'MŇAU!';
+      bubble.style.top = (40 + Math.random() * 100) + 'px';
+      bubble.style.left = (cat.offsetLeft + 100 + Math.random() * 60 - 30) + 'px';
+      catContainer.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 1500);
+    }
+  }
 
   if (clickCount === 10) {
     cat.style.display = 'none';
     heartMsg.style.display = 'block';
-    sessionStorage.setItem('catClicked', 'true');
-    setTimeout(() => window.location.href = 'app.html', 1500);
-  } else {
-    bubble.classList.add('visible');
-    setTimeout(() => bubble.classList.remove('visible'), 800);
+    setTimeout(() => {
+      heartMsg.style.display = 'none';
+      app.classList.remove('hidden');
+      sessionStorage.setItem('catClicked', 'true');
+    }, 2000);
   }
-});
-
-window.addEventListener('pageshow', () => {
-  clickCount = 0;
-  isTongue = false;
-  cat.src = 'cat.png';
-  cat.style.display = 'block';
-  heartMsg.style.display = 'none';
 });

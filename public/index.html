@@ -4,15 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kočičí přístup</title>
+  <title>Kočičí brána</title>
   <link rel="stylesheet" href="cat.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div id="cat-container">
-    <img id="cat" src="cat.png" alt="Kočka strážkyně" />
-    <div id="bubble">MŇAU!</div>
+    <img id="cat" src="cat.png" alt="Kočka" />
     <div id="heart-msg">❤️ AHOJ ❤️</div>
+  </div>
+  <div id="app" class="hidden">
+    <h2>💸 Přehled splátek</h2>
+    <div id="summary">
+      <div>Zaplaceno: <strong id="paidAmount">…</strong> Kč</div>
+      <div>Zbývá zaplatit: <strong id="unpaidAmount">…</strong> Kč</div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Datum</th><th>Stav</th><th>Částka</th></tr>
+      </thead>
+      <tbody>
+        <tr class="paid" data-amount="1000"><td>1</td><td>2024-01-01</td><td></td><td>1000</td></tr>
+        <tr class="paid" data-amount="1200"><td>2</td><td>2024-02-01</td><td></td><td>1200</td></tr>
+        <tr class="unpaid nearest-highlight" data-amount="1400"><td>3</td><td>2024-03-01</td><td></td><td>1400</td></tr>
+        <tr class="unpaid" data-amount="1600"><td>4</td><td>2024-04-01</td><td></td><td>1600</td></tr>
+      </tbody>
+    </table>
   </div>
   <script src="cat.js"></script>
 </body>
