@@ -18,6 +18,7 @@ body {
   overflow: hidden;
   min-height: 100vh;
   padding: 2rem;
+  position: relative;
 }
 
 .hidden {
@@ -25,10 +26,13 @@ body {
 }
 
 #cat-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
   z-index: 2;
 }
 
@@ -45,20 +49,21 @@ body {
 
 .meow-pop {
   position: absolute;
-  font-size: 1.2rem;
   background: var(--pink);
   color: #1a001f;
-  padding: 0.3rem 0.8rem;
+  padding: 0.4rem 1rem;
   border-radius: 14px;
   font-weight: bold;
-  animation: fadePop 1.2s forwards ease-out;
-  box-shadow: 0 0 6px #ffb4ec;
+  opacity: 0;
   pointer-events: none;
+  animation: fadePop 1.2s forwards ease-out;
+  box-shadow: 0 0 8px #ffb4ec;
+  font-size: 1rem;
 }
 
 @keyframes fadePop {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+  0% { opacity: 0.8; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-25px) scale(0.9); }
 }
 
 #heart-msg {
@@ -66,26 +71,28 @@ body {
   font-size: 2.6rem;
   color: var(--heart);
   text-shadow: 0 0 12px var(--heart);
+}
+
+.grow {
   animation: growHeart 1.5s forwards ease-in-out;
 }
 
 @keyframes growHeart {
   0% { transform: scale(0); opacity: 0; }
-  60% { transform: scale(1.2); opacity: 1; }
+  60% { transform: scale(1.3); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
 
 #app {
   max-width: 960px;
-  margin: 4rem auto;
+  margin: 5rem auto;
   background: var(--glass);
   backdrop-filter: blur(16px);
   padding: 2rem;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 0 30px rgba(203, 128, 255, 0.2),
-    0 0 12px rgba(255, 112, 196, 0.08);
+  box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
+              0 0 12px rgba(255, 112, 196, 0.08);
   z-index: 1;
 }
 
@@ -103,6 +110,7 @@ h2 {
   gap: 2rem;
   margin-bottom: 2rem;
   text-align: center;
+  font-size: 1.1rem;
 }
 
 #summary strong {
@@ -113,9 +121,8 @@ table {
   width: 100%;
   border-collapse: collapse;
   background: rgba(255, 255, 255, 0.02);
-  box-shadow:
-    0 0 16px rgba(203, 128, 255, 0.2),
-    0 0 22px rgba(0, 217, 255, 0.1);
+  box-shadow: 0 0 16px rgba(203, 128, 255, 0.2),
+              0 0 22px rgba(0, 217, 255, 0.1);
   border-radius: 8px;
   overflow: hidden;
 }
