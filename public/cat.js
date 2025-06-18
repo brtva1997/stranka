@@ -1,3 +1,11 @@
+// 🔁 Přednačtení obrázků pro okamžité přepínání
+const images = {
+  normal: new Image(),
+  tongue: new Image()
+};
+images.normal.src = 'cat.png';
+images.tongue.src = 'cat2.png';
+
 const cat = document.getElementById('cat');
 const catContainer = document.getElementById('cat-container');
 const heartMsg = document.getElementById('heart-msg');
@@ -13,8 +21,11 @@ cat.addEventListener('click', () => {
 
   clickCount++;
   isTongue = !isTongue;
-  cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
+  // 🐱 Okamžitá změna obrázku bez prodlevy
+  cat.src = isTongue ? images.tongue.src : images.normal.src;
+
+  // 💬 Odstranění všech stávajících bublin
   document.querySelectorAll('.meow-pop').forEach(b => b.remove());
 
   if (clickCount < 10) {
@@ -63,7 +74,7 @@ cat.addEventListener('click', () => {
   }
 });
 
-// 🛡️ Blokace pinch/double-tap zoom na mobilech
+// 🛡️ Blokace pinch/double-tap zoom
 document.addEventListener('touchstart', e => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
