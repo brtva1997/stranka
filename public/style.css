@@ -2,7 +2,7 @@
 
 :root {
   --bg: #0b0016;
-  --bg-alt: #170029;
+  --bg-alt: #1a001f;
   --glass: rgba(255, 255, 255, 0.05);
   --purple: #cb80ff;
   --cyan: #00d9ff;
@@ -53,9 +53,10 @@ body {
   backdrop-filter: blur(16px);
   padding: 2rem;
   border-radius: 20px;
-  box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
-              0 0 12px rgba(255, 112, 196, 0.08);
-  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 0 30px rgba(203, 128, 255, 0.2),
+    0 0 12px rgba(255, 112, 196, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 h2 {
@@ -83,8 +84,9 @@ table {
   border-collapse: collapse;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 16px rgba(203, 128, 255, 0.2),
-              0 0 22px rgba(0, 217, 255, 0.1);
+  box-shadow:
+    0 0 16px rgba(203, 128, 255, 0.2),
+    0 0 22px rgba(0, 217, 255, 0.1);
 }
 
 thead {
@@ -94,7 +96,7 @@ thead {
 th, td {
   padding: 1.2rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   position: relative;
   font-size: 1rem;
 }
