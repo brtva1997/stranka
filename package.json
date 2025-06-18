@@ -1,0 +1,15 @@
+{
+  "name": "kocici-brana",
+  "version": "1.0.0",
+  "description": "Kočičí brána se srdíčkem a přehledem splátek",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["kočka", "srdce", "splátky", "express", "front-end"],
+  "author": "Bretislav",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
