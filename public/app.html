@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moje aplikace</title>
+
+  <!-- Styl -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Kontrola přístupu -->
+  <script>
+    if (localStorage.getItem('catClicked') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    window.addEventListener('beforeunload', () => {
+      localStorage.removeItem('catClicked');
+    });
+  </script>
+
+  <!-- Gradient fix -->
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #18001f 0%, #0b0016 100%);
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h2>💸 Přehled splátek</h2>
+
+    <div id="summary">
+      <div>Celkem splátek: <strong>12</strong></div>
+      <div>Zaplaceno: <strong>7</strong></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Datum</th>
+          <th>Stav</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="paid">
+          <td>1</td><td>2024-01-01</td><td></td>
+        </tr>
+        <tr class="unpaid nearest-highlight">
+          <td>2</td><td>2024-02-01</td><td></td>
+        </tr>
+        <!-- ... další řádky ... -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Hearts nebo jiný efekt pozadí -->
+  <div id="hearts-container"></div>
+</body>
+</html>

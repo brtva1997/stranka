@@ -1,40 +1,49 @@
 body {
   margin: 0;
-  background: linear-gradient(to bottom, #18001f, #0b0016);
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #18001f 0%, #0b0016 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  overflow: hidden;
 }
 
 .container {
-  animation: fadeIn 1.5s ease;
+  position: relative;
+  animation: fadeIn 1s ease;
 }
 
 img#cat {
   width: 240px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, filter 0.4s ease, box-shadow 0.4s ease;
+  filter: brightness(1) drop-shadow(0 0 10px #cb80ff);
 }
 
-img#cat.lick {
-  animation: lick 1.2s ease forwards;
+img#cat:hover {
+  transform: scale(1.06) rotate(1deg);
+  filter: brightness(1.2) drop-shadow(0 0 18px #ff70c4);
+  box-shadow: 0 0 24px rgba(255, 112, 196, 0.4);
 }
 
-img#cat.smile {
-  filter: drop-shadow(0 0 8px #ffb4ec);
-  transform: scale(1.1);
+.bubble {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffb4ec;
+  color: #300010;
+  padding: 0.4rem 0.9rem;
+  border-radius: 16px;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 0 6px rgba(255, 112, 196, 0.4);
 }
 
-@keyframes lick {
-  0%   { transform: rotate(0); }
-  20%  { transform: rotate(-5deg); }
-  40%  { transform: rotate(5deg); }
-  60%  { transform: rotate(-3deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+.bubble.visible {
+  opacity: 1;
 }

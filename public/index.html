@@ -1,59 +1,16 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <script>
-  if (localStorage.getItem('catClicked') !== 'true') {
-    window.location.href = 'welcome.html';
-  }
-</script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CyberSplatky 2077</title>
-
-  <!-- Orbitron font for futuristic look -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kočičí portál</title>
+  <link rel="stylesheet" href="cat.css" />
 </head>
 <body>
-  <div id="hearts-container"></div>
-
-  <div id="app">
-    <h2>Seznam splátek</h2>
-
-    <div id="summary">
-      <p>Celkem: <strong><span id="total-amount">0</span> Kč</strong></p>
-      <p>Zaplaceno: <strong><span id="paid-amount">0</span> Kč</strong></p>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Částka</th>
-          <th>Stav</th>
-        </tr>
-      </thead>
-      <tbody id="payments-body"></tbody>
-    </table>
+  <div class="container">
+    <img id="cat" src="cat.png" alt="Kočka strážkyně" />
+    <div class="bubble" id="meow">MŇAU!</div>
   </div>
-
-  <script src="requests.js"></script>
-  <script>
-    // 💖 Padající srdíčka
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.innerText = '💖';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = Math.random() * 10 + 14 + 'px';
-      heart.style.animationDuration = Math.random() * 5 + 4 + 's';
-      document.getElementById('hearts-container').appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
-    }
-    setInterval(createHeart, 800);
-  </script>
+  <script src="cat.js"></script>
 </body>
 </html>
