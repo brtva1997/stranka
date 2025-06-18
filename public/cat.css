@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  background: linear-gradient(to bottom, #18001f, #0b0016);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.container {
+  animation: fadeIn 1.5s ease;
+}
+
+img#cat {
+  width: 240px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+img#cat.lick {
+  animation: lick 1.2s ease forwards;
+}
+
+img#cat.smile {
+  filter: drop-shadow(0 0 8px #ffb4ec);
+  transform: scale(1.1);
+}
+
+@keyframes lick {
+  0%   { transform: rotate(0); }
+  20%  { transform: rotate(-5deg); }
+  40%  { transform: rotate(5deg); }
+  60%  { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
