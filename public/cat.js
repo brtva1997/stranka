@@ -10,7 +10,7 @@ cat.addEventListener('click', () => {
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  // Smazat předchozí bublinu "MŇAU!"
+  // Smazat předchozí MŇAU!
   const oldMeow = document.querySelector('.meow-pop');
   if (oldMeow) oldMeow.remove();
 
@@ -31,22 +31,25 @@ cat.addEventListener('click', () => {
     heartMsg.style.display = 'block';
     heartMsg.classList.add('grow');
 
+    // Přidej výbuch po vyrostlém srdci
+    setTimeout(() => {
+      heartMsg.classList.remove('grow');
+      heartMsg.classList.add('explode');
+    }, 1800);
+
     setTimeout(() => {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
-      sessionStorage.setItem('catClicked', 'true');
 
       // 💸 Výpočet částek
       const paid = [...document.querySelectorAll('tr.paid')];
       const unpaid = [...document.querySelectorAll('tr.unpaid')];
-
       const paidSum = paid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
       const unpaidSum = unpaid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-
       document.getElementById('paidAmount').textContent = paidSum.toLocaleString();
       document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
 
-      // ❤️ Srdíčka do pozadí
+      // ❤️ Padající srdíčka
       const hearts = document.getElementById('hearts-container');
       setInterval(() => {
         const heart = document.createElement('div');
@@ -58,6 +61,6 @@ cat.addEventListener('click', () => {
         hearts.appendChild(heart);
         setTimeout(() => hearts.removeChild(heart), 10000);
       }, 400);
-    }, 2000);
+    }, 3200);
   }
 });
