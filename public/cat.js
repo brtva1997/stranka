@@ -10,7 +10,6 @@ cat.addEventListener('click', () => {
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  // Smazat předchozí MŇAU!
   const oldMeow = document.querySelector('.meow-pop');
   if (oldMeow) oldMeow.remove();
 
@@ -31,7 +30,6 @@ cat.addEventListener('click', () => {
     heartMsg.style.display = 'block';
     heartMsg.classList.add('grow');
 
-    // Přidej výbuch po vyrostlém srdci
     setTimeout(() => {
       heartMsg.classList.remove('grow');
       heartMsg.classList.add('explode');
@@ -41,7 +39,6 @@ cat.addEventListener('click', () => {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
 
-      // 💸 Výpočet částek
       const paid = [...document.querySelectorAll('tr.paid')];
       const unpaid = [...document.querySelectorAll('tr.unpaid')];
       const paidSum = paid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
@@ -49,7 +46,6 @@ cat.addEventListener('click', () => {
       document.getElementById('paidAmount').textContent = paidSum.toLocaleString();
       document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
 
-      // ❤️ Padající srdíčka
       const hearts = document.getElementById('hearts-container');
       setInterval(() => {
         const heart = document.createElement('div');
