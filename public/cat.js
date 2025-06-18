@@ -64,7 +64,7 @@ cat.addEventListener('click', () => {
   }
 });
 
-// 🛡️ Zrušení pinch zoom & double-tap
+// 🛡️ Blokace přiblížení a dvouklepu
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
