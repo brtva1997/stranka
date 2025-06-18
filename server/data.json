@@ -1,7 +1,7 @@
 {
   "payments": [
-    { "date": "2025-05-23", "amount": 150, "paid": false },
-    { "date": "2025-05-30", "amount": 150, "paid": false },
+    { "date": "2025-05-23", "amount": 150, "paid": true },
+    { "date": "2025-05-30", "amount": 150, "paid": true },
     { "date": "2026-06-06", "amount": 150, "paid": false }
   ]
 }

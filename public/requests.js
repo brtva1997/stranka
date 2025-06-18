@@ -53,6 +53,8 @@ async function loadPayments() {
 
   document.getElementById('total-amount').textContent = total;
   document.getElementById('paid-amount').textContent = paid;
+  paidCell.textContent = payment.paid ? '✅' : '⌛';
+
 }
 
 window.onload = loadPayments;
