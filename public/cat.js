@@ -1,29 +1,32 @@
 const cat = document.getElementById('cat');
-const meow = document.getElementById('meow');
+const bubble = document.getElementById('bubble');
+const heartMsg = document.getElementById('heart-msg');
 let clickCount = 0;
+let isTongue = false;
 
 cat.addEventListener('click', () => {
   clickCount++;
+  isTongue = !isTongue;
+  cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  // Přepínání výrazů
-  const isEven = clickCount % 2 === 0;
-  cat.src = isEven ? 'cat2.png' : 'cat.png';
-
-  // Jemná animace
   cat.style.transform = 'scale(1.08)';
-  setTimeout(() => cat.style.transform = 'rotate(0deg)', 250);
+  setTimeout(() => cat.style.transform = 'scale(1)', 250);
 
-  // Po šestém kliknutí: MŇAU + redirect
-  if (clickCount === 6) {
-    meow.classList.add('visible');
+  if (clickCount === 10) {
+    cat.style.display = 'none';
+    heartMsg.style.display = 'block';
     sessionStorage.setItem('catClicked', 'true');
-    setTimeout(() => window.location.href = 'app.html', 1200);
+    setTimeout(() => window.location.href = 'app.html', 1500);
+  } else {
+    bubble.classList.add('visible');
+    setTimeout(() => bubble.classList.remove('visible'), 800);
   }
 });
 
-// Reset stavu po návratu
 window.addEventListener('pageshow', () => {
   clickCount = 0;
+  isTongue = false;
   cat.src = 'cat.png';
-  meow.classList.remove('visible');
+  cat.style.display = 'block';
+  heartMsg.style.display = 'none';
 });
