@@ -20,6 +20,12 @@
         <h2>Seznam splátek</h2>
         <button onclick="logout()">Odhlásit</button>
       </div>
+
+      <div id="summary">
+        <p>Celkem: <strong><span id="total-amount">0</span> Kč</strong></p>
+        <p>Zaplaceno: <strong><span id="paid-amount">0</span> Kč</strong></p>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -33,24 +39,7 @@
     </div>
   </div>
 
-  <!-- 💖 Padající srdíčka -->
   <div id="hearts-container"></div>
-
   <script src="requests.js"></script>
-  <script>
-    // Efekt srdíček
-    const container = document.getElementById("hearts-container");
-    function spawnHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 20 + 10 + "px";
-      heart.style.animationDuration = Math.random() * 3 + 3 + "s";
-      container.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
-    }
-    setInterval(spawnHeart, 400);
-  </script>
 </body>
 </html>
