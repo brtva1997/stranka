@@ -2,10 +2,15 @@ const cat = document.getElementById('cat');
 const catContainer = document.getElementById('cat-container');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
+const heartsContainer = document.getElementById('hearts-container');
+
 let clickCount = 0;
 let isTongue = false;
+let transitionDone = false;
 
 cat.addEventListener('click', () => {
+  if (transitionDone) return;
+
   clickCount++;
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
@@ -17,15 +22,14 @@ cat.addEventListener('click', () => {
     const bubble = document.createElement('div');
     bubble.className = 'meow-pop';
     bubble.textContent = 'MŇAU!';
-    const offsetX = Math.random() * 100 - 50;
-    const offsetY = Math.random() * -50 - 10;
-    bubble.style.left = `${offsetX}px`;
-    bubble.style.top = `${offsetY}px`;
+    bubble.style.left = `${Math.random() * 100 - 50}px`;
+    bubble.style.top = `${Math.random() * -50 - 10}px`;
     catContainer.appendChild(bubble);
     setTimeout(() => bubble.remove(), 1200);
   }
 
   if (clickCount === 10) {
+    transitionDone = true;
     cat.style.display = 'none';
     heartMsg.style.display = 'block';
     heartMsg.classList.add('grow');
@@ -39,14 +43,13 @@ cat.addEventListener('click', () => {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
 
-      const paid = [...document.querySelectorAll('tr.paid')];
-      const unpaid = [...document.querySelectorAll('tr.unpaid')];
-      const paidSum = paid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-      const unpaidSum = unpaid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
+      const paidRows = [...document.querySelectorAll('tr.paid')];
+      const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
+      const paidSum = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
+      const unpaidSum = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
       document.getElementById('paidAmount').textContent = paidSum.toLocaleString();
       document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
 
-      const hearts = document.getElementById('hearts-container');
       setInterval(() => {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -54,9 +57,21 @@ cat.addEventListener('click', () => {
         heart.style.fontSize = Math.random() * 20 + 10 + 'px';
         heart.style.animationDuration = 6 + Math.random() * 4 + 's';
         heart.textContent = '❤';
-        hearts.appendChild(heart);
-        setTimeout(() => hearts.removeChild(heart), 10000);
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 10000);
       }, 400);
     }, 3200);
   }
+});
+
+// 🛡️ Zrušení pinch zoom & double-tap
+document.addEventListener('touchstart', (e) => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) e.preventDefault();
+  lastTouchEnd = now;
 });
