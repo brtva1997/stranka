@@ -17,6 +17,8 @@ router.get('/', (req, res) => {
 router.post('/update', (req, res) => {
   const { index, amount, paid } = req.body;
   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+console.log(`Ukládám do ${filePath}`);
+console.log(data.payments[index]);
 
   if (data.payments[index]) {
     data.payments[index].amount = amount;
