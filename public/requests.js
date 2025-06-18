@@ -26,7 +26,6 @@ async function loadPayments(role) {
   let nearestIndex = -1;
   let minDiff = Infinity;
 
-  // Najdi nejbližší budoucí NESPLACENOU splátku
   data.payments.forEach((payment, index) => {
     const paymentDate = new Date(payment.date);
     if (!payment.paid && paymentDate >= today) {
@@ -38,12 +37,13 @@ async function loadPayments(role) {
     }
   });
 
-  console.log("Nearest index:", nearestIndex); // 🛠 Pro ladění
+  console.log("Nearest index:", nearestIndex);
 
   data.payments.forEach((payment, index) => {
     const row = document.createElement('tr');
 
     if (index === nearestIndex && nearestIndex !== -1) {
+      console.log("Přidávám .nearest-highlight na řádek:", index);
       row.classList.add('nearest-highlight');
     }
 
