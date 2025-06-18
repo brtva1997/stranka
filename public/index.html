@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seznam splátek</title>
+  <title>Galaktické splátky</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="hearts-container"></div>
+
   <div id="app">
     <h2>Seznam splátek</h2>
 
@@ -28,5 +30,19 @@
   </div>
 
   <script src="requests.js"></script>
+  <script>
+    // 💖 Random srdíčka
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerText = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = Math.random() * 10 + 14 + 'px';
+      heart.style.animationDuration = Math.random() * 5 + 4 + 's';
+      document.getElementById('hearts-container').appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 800);
+  </script>
 </body>
 </html>

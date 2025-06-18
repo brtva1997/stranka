@@ -28,8 +28,11 @@ async function loadPayments() {
     if (index === nearestIndex && nearestIndex !== -1) {
       row.classList.add('nearest-highlight');
     }
+
     if (payment.paid) {
       row.classList.add('paid');
+    } else {
+      row.classList.add('unpaid');
     }
 
     const dateCell = document.createElement('td');
@@ -39,8 +42,7 @@ async function loadPayments() {
     amountCell.textContent = payment.amount;
 
     const paidCell = document.createElement('td');
-    paidCell.textContent = payment.paid ? '✅' : '🟠–';
-    paidCell.style.textAlign = 'center';
+    paidCell.textContent = ''; // ikony jdou přes CSS content
 
     row.appendChild(dateCell);
     row.appendChild(amountCell);
@@ -53,8 +55,6 @@ async function loadPayments() {
 
   document.getElementById('total-amount').textContent = total;
   document.getElementById('paid-amount').textContent = paid;
-  paidCell.textContent = payment.paid ? '✅' : '⌛';
-
 }
 
 window.onload = loadPayments;

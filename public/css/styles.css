@@ -1,146 +1,111 @@
-:root {
-  --bg: #121212;
-  --card: #1f1f1f;
-  --text: #e0e0e0;
-  --accent: #4caf50;
-  --paid: #66bb6a;
-  --unpaid: #ff9800;
-  --border: #333;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
+  background: radial-gradient(ellipse at top, #0f0f0f, #000);
+  color: #e0e0e0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
   padding: 2rem;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  position: relative;
   overflow: hidden;
-}
-
-/* 💖 Padající srdíčka */
-#hearts-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.heart {
-  position: absolute;
-  color: #ff5e99;
-  font-size: 24px;
-  animation: fall 6s linear infinite;
-  opacity: 0.8;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-10%) rotate(0deg);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0;
-  }
+  position: relative;
 }
 
 #app {
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 0 30px rgba(0,255,170,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 2rem;
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 900px;
-  background-color: var(--card);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  animation: glass-enter 1s ease-out;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: var(--accent);
-}
-
-#summary {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+@keyframes glass-enter {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-}
-
-thead {
-  background-color: #1b1b1b;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.05);
 }
 
 th, td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-th {
-  color: var(--accent);
+thead {
+  background-color: rgba(255,255,255,0.05);
+  color: #8ef9e2;
   text-transform: uppercase;
   font-size: 0.9rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
-td:nth-child(3) {
-  font-size: 1.5rem;
-  text-align: center;
+.paid {
+  background: linear-gradient(90deg, rgba(102,187,106,0.1), transparent);
+  animation: pulse-paid 2s infinite ease-in-out;
 }
 
-.paid td:nth-child(3) {
-  color: var(--paid);
+.unpaid {
+  background: linear-gradient(90deg, rgba(255,152,0,0.08), transparent);
+  animation: pulse-unpaid 3s infinite ease-in-out;
 }
 
-tr:not(.paid) td:nth-child(3) {
-  color: var(--unpaid);
+@keyframes pulse-paid {
+  0%, 100% { box-shadow: 0 0 0 rgba(102,187,106,0.0); }
+  50% { box-shadow: 0 0 12px rgba(102,187,106,0.4); }
+}
+
+@keyframes pulse-unpaid {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,152,0,0.0); }
+  50% { box-shadow: 0 0 12px rgba(255,152,0,0.35); }
 }
 
 .nearest-highlight {
-  background-color: rgba(76, 175, 80, 0.08);
-  border-left: 5px solid var(--accent);
-  font-weight: bold;
-  box-shadow: inset 0 0 0 1px rgba(76,175,80,0.15);
+  position: relative;
+  background: rgba(76, 175, 80, 0.12);
+  border-left: 6px solid #66ff66;
+  animation: neon-glow 4s ease-in-out infinite alternate;
 }
 
-@media (max-width: 600px) {
-  body {
-    padding: 1rem;
+@keyframes neon-glow {
+  0% {
+    box-shadow: 0 0 5px #66ff66, inset 0 0 8px #66ff66;
   }
+  100% {
+    box-shadow: 0 0 20px #66ff66, inset 0 0 12px #66ff66;
+  }
+}
 
-  #summary {
-    flex-direction: column;
-    align-items: center;
-  }
+td:nth-child(3) {
+  font-size: 1.6rem;
+  color: #ffffff;
+  text-shadow: 0 0 3px rgba(255,255,255,0.2);
+}
+.paid td:nth-child(3)::after {
+  content: " ✅";
+  color: #66ff66;
+}
+.unpaid td:nth-child(3)::after {
+  content: " ⌛";
+  color: #ff9800;
+}
 
-  th, td {
-    font-size: 0.95rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
+/* Srdíčka – zachováno */
+.heart {
+  position: absolute;
+  color: #ff66aa;
+  font-size: 20px;
+  animation: fall 8s linear infinite;
+  opacity: 0.7;
+}
+@keyframes fall {
+  0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
 }
