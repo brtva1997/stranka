@@ -15,8 +15,7 @@ cat.addEventListener('click', () => {
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  const oldMeow = document.querySelector('.meow-pop');
-  if (oldMeow) oldMeow.remove();
+  document.querySelectorAll('.meow-pop').forEach(b => b.remove());
 
   if (clickCount < 10) {
     const bubble = document.createElement('div');
@@ -25,7 +24,7 @@ cat.addEventListener('click', () => {
     bubble.style.left = `${Math.random() * 100 - 50}px`;
     bubble.style.top = `${Math.random() * -50 - 10}px`;
     catContainer.appendChild(bubble);
-    setTimeout(() => bubble.remove(), 1200);
+    setTimeout(() => bubble.remove(), 1000);
   }
 
   if (clickCount === 10) {
@@ -64,13 +63,13 @@ cat.addEventListener('click', () => {
   }
 });
 
-// 🛡️ Blokace přiblížení a dvouklepu
-document.addEventListener('touchstart', (e) => {
+// 🛡️ Blokace pinch/double-tap zoom na mobilech
+document.addEventListener('touchstart', e => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
 
 let lastTouchEnd = 0;
-document.addEventListener('touchend', (e) => {
+document.addEventListener('touchend', e => {
   const now = Date.now();
   if (now - lastTouchEnd <= 300) e.preventDefault();
   lastTouchEnd = now;
