@@ -2,44 +2,31 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loan Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seznam splátek</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="app">
-    <div id="login">
-      <h2>Přihlášení</h2>
-      <input type="text" id="username" placeholder="Uživatelské jméno" />
-      <input type="password" id="password" placeholder="Heslo" />
-      <button onclick="login()">Přihlásit</button>
+    <h2>Seznam splátek</h2>
+
+    <div id="summary">
+      <p>Celkem: <strong><span id="total-amount">0</span> Kč</strong></p>
+      <p>Zaplaceno: <strong><span id="paid-amount">0</span> Kč</strong></p>
     </div>
 
-    <div id="table" style="display: none;">
-      <div class="table-header">
-        <h2>Seznam splátek</h2>
-        <button onclick="logout()">Odhlásit</button>
-      </div>
-
-      <div id="summary">
-        <p>Celkem: <strong><span id="total-amount">0</span> Kč</strong></p>
-        <p>Zaplaceno: <strong><span id="paid-amount">0</span> Kč</strong></p>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Datum</th>
-            <th>Částka</th>
-            <th>Zaplaceno</th>
-          </tr>
-        </thead>
-        <tbody id="payments-body"></tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Částka</th>
+          <th>Stav</th>
+        </tr>
+      </thead>
+      <tbody id="payments-body"></tbody>
+    </table>
   </div>
 
-  <div id="hearts-container"></div>
   <script src="requests.js"></script>
 </body>
 </html>
