@@ -6,13 +6,17 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Kočičí brána</title>
   <link rel="stylesheet" href="cat.css" />
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <div id="hearts-container"></div>
+
   <div id="cat-container">
     <img id="cat" src="cat.png" alt="Kočka" />
-    <div id="heart-msg">❤️ AHOJ ❤️</div>
+    <div id="heart-msg">❤️</div>
   </div>
+
   <div id="app" class="hidden">
     <h2>💸 Přehled splátek</h2>
     <div id="summary">
@@ -31,6 +35,7 @@
       </tbody>
     </table>
   </div>
+
   <script src="cat.js"></script>
 </body>
 </html>

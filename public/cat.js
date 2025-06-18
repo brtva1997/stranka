@@ -10,7 +10,7 @@ cat.addEventListener('click', () => {
   isTongue = !isTongue;
   cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  // Odstranit předchozí MŇAU
+  // Smazat předchozí bublinu "MŇAU!"
   const oldMeow = document.querySelector('.meow-pop');
   if (oldMeow) oldMeow.remove();
 
@@ -18,8 +18,10 @@ cat.addEventListener('click', () => {
     const bubble = document.createElement('div');
     bubble.className = 'meow-pop';
     bubble.textContent = 'MŇAU!';
-    bubble.style.left = `${Math.random() * 200 - 100}px`;
-    bubble.style.top = `${Math.random() * -50 - 10}px`;
+    const offsetX = Math.random() * 100 - 50;
+    const offsetY = Math.random() * -50 - 10;
+    bubble.style.left = `${offsetX}px`;
+    bubble.style.top = `${offsetY}px`;
     catContainer.appendChild(bubble);
     setTimeout(() => bubble.remove(), 1200);
   }
@@ -34,16 +36,28 @@ cat.addEventListener('click', () => {
       app.classList.remove('hidden');
       sessionStorage.setItem('catClicked', 'true');
 
-      // Výpočet částek
+      // 💸 Výpočet částek
       const paid = [...document.querySelectorAll('tr.paid')];
       const unpaid = [...document.querySelectorAll('tr.unpaid')];
+
       const paidSum = paid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
       const unpaidSum = unpaid.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
 
-      document.getElementById('paidAmount').textContent =
-        paidSum.toLocaleString();
-      document.getElementById('unpaidAmount').textContent =
-        unpaidSum.toLocaleString();
+      document.getElementById('paidAmount').textContent = paidSum.toLocaleString();
+      document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
+
+      // ❤️ Srdíčka do pozadí
+      const hearts = document.getElementById('hearts-container');
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+        heart.style.animationDuration = 6 + Math.random() * 4 + 's';
+        heart.textContent = '❤';
+        hearts.appendChild(heart);
+        setTimeout(() => hearts.removeChild(heart), 10000);
+      }, 400);
     }, 2000);
   }
 });
