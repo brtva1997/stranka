@@ -25,14 +25,9 @@ async function loadPayments() {
   data.payments.forEach((payment, index) => {
     const row = document.createElement('tr');
 
-    if (index === nearestIndex && nearestIndex !== -1) {
+    row.classList.add(payment.paid ? 'paid' : 'unpaid');
+    if (index === nearestIndex) {
       row.classList.add('nearest-highlight');
-    }
-
-    if (payment.paid) {
-      row.classList.add('paid');
-    } else {
-      row.classList.add('unpaid');
     }
 
     const dateCell = document.createElement('td');
@@ -42,7 +37,7 @@ async function loadPayments() {
     amountCell.textContent = payment.amount;
 
     const paidCell = document.createElement('td');
-    paidCell.textContent = ''; // ikony jdou přes CSS content
+    paidCell.textContent = ''; // ikony přes CSS ::after
 
     row.appendChild(dateCell);
     row.appendChild(amountCell);
