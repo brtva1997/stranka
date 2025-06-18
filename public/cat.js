@@ -1,4 +1,4 @@
-// 🔁 Přednačtení obrázků pro okamžité přepínání
+// 🔁 Přednačtení obrázků
 const images = {
   normal: new Image(),
   tongue: new Image()
@@ -16,16 +16,17 @@ let clickCount = 0;
 let isTongue = false;
 let transitionDone = false;
 
-cat.addEventListener('click', () => {
+// 🚀 Okamžité reakce na mobilu i desktopu
+cat.addEventListener('touchstart', handleClick, { passive: true });
+cat.addEventListener('mousedown', handleClick);
+
+function handleClick() {
   if (transitionDone) return;
 
   clickCount++;
   isTongue = !isTongue;
-
-  // 🐱 Okamžitá změna obrázku bez prodlevy
   cat.src = isTongue ? images.tongue.src : images.normal.src;
 
-  // 💬 Odstranění všech stávajících bublin
   document.querySelectorAll('.meow-pop').forEach(b => b.remove());
 
   if (clickCount < 10) {
@@ -72,15 +73,15 @@ cat.addEventListener('click', () => {
       }, 400);
     }, 3200);
   }
-});
+}
 
-// 🛡️ Blokace pinch/double-tap zoom
-document.addEventListener('touchstart', e => {
+// 🛡️ Blokace pinch zoom & double-tap zoom
+document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
 
 let lastTouchEnd = 0;
-document.addEventListener('touchend', e => {
+document.addEventListener('touchend', (e) => {
   const now = Date.now();
   if (now - lastTouchEnd <= 300) e.preventDefault();
   lastTouchEnd = now;
