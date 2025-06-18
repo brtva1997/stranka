@@ -4,67 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Moje aplikace</title>
-
-  <!-- Styl -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Kontrola přístupu -->
-  <script>
-    if (localStorage.getItem('catClicked') !== 'true') {
-      window.location.href = 'index.html';
-    }
-
-    window.addEventListener('beforeunload', () => {
-      localStorage.removeItem('catClicked');
-    });
-  </script>
-
-  <!-- Pozadí pro mobilní zařízení -->
   <style>
     body {
       min-height: 100vh;
       background: linear-gradient(to bottom, #18001f 0%, #0b0016 100%);
       background-attachment: fixed;
-      background-repeat: no-repeat;
+      font-family: sans-serif;
+      color: #f0f0f0;
+      padding: 2rem;
     }
+    table, th, td {
+      border: 1px solid #444;
+      border-collapse: collapse;
+      padding: 0.5rem;
+    }
+    .paid { color: lime; }
+    .unpaid { color: tomato; }
   </style>
+
+  <script>
+    if (sessionStorage.getItem('catClicked') !== 'true') {
+      window.location.href = 'index.html';
+    }
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.removeItem('catClicked');
+    });
+  </script>
 </head>
 
 <body>
-  <div id="app">
-    <h2>💸 Přehled splátek</h2>
-
-    <div id="summary">
-      <div>Celkem splátek: <strong>12</strong></div>
-      <div>Zaplaceno: <strong>7</strong></div>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Datum</th>
-          <th>Stav</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="paid"><td>1</td><td>2024-01-01</td><td></td></tr>
-        <tr class="paid"><td>2</td><td>2024-02-01</td><td></td></tr>
-        <tr class="paid"><td>3</td><td>2024-03-01</td><td></td></tr>
-        <tr class="paid"><td>4</td><td>2024-04-01</td><td></td></tr>
-        <tr class="paid"><td>5</td><td>2024-05-01</td><td></td></tr>
-        <tr class="paid"><td>6</td><td>2024-06-01</td><td></td></tr>
-        <tr class="paid"><td>7</td><td>2024-07-01</td><td></td></tr>
-        <tr class="unpaid nearest-highlight"><td>8</td><td>2024-08-01</td><td></td></tr>
-        <tr class="unpaid"><td>9</td><td>2024-09-01</td><td></td></tr>
-        <tr class="unpaid"><td>10</td><td>2024-10-01</td><td></td></tr>
-        <tr class="unpaid"><td>11</td><td>2024-11-01</td><td></td></tr>
-        <tr class="unpaid"><td>12</td><td>2024-12-01</td><td></td></tr>
-      </tbody>
-    </table>
+  <h2>💸 Přehled splátek</h2>
+  <div id="summary">
+    <div>Zaplaceno: <strong id="paidAmount">...</strong> Kč</div>
+    <div>Zbývá zaplatit: <strong id="unpaidAmount">...</strong> Kč</div>
   </div>
 
-  <!-- Dekorace (např. plovoucí srdíčka) -->
-  <div id="hearts-container"></div>
+  <table>
+    <thead><tr><th>#</th><th>Datum</th><th>Stav</th><th>Částka</th></tr></thead>
+    <tbody>
+      <tr class="paid" data-amount="1000"><td>1</td><td>2024-01-01</td><td>✔</td><td>1000</td></tr>
+      <tr class="paid" data-amount="1000"><td>2</td><td>2024-02-01</td><td>✔</td><td>1000</td></tr>
+      <tr class="paid" data-amount="1000"><td>3</td><td>2024-03-01</td><td>✔</td><td>1000</td></tr>
+      <tr class="unpaid" data-amount="1000"><td>4</td><td>2024-04-01</td><td></td><td>1000</td></tr>
+      <tr class="unpaid" data-amount="1000"><td>5</td><td>2024-05-01</td><td></td><td>1000</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    const paidRows = [...document.querySelectorAll('tr.paid')];
+    const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
+
+    const paidAmount = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
+    const unpaidAmount = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
+
+    document.getElementById('paidAmount').textContent = paidAmount.toLocaleString();
+    document.getElementById('unpaidAmount').textContent = unpaidAmount.toLocaleString();
+  </script>
 </body>
 </html>

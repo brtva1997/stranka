@@ -1,23 +1,30 @@
 const cat = document.getElementById('cat');
 const meow = document.getElementById('meow');
 let clickCount = 0;
+let isTongue = false;
 
 cat.addEventListener('click', () => {
   clickCount++;
 
-  if (clickCount === 1) {
-    cat.style.transform = 'rotate(-2deg)';
-    setTimeout(() => cat.style.transform = 'rotate(0deg)', 300);
-  }
+  // Střídání obrázku kočičky
+  isTongue = !isTongue;
+  cat.src = isTongue ? 'cat2.png' : 'cat.png';
 
-  if (clickCount === 2) {
-    cat.src = 'cat2.png'; // přepneme na jazyk
-    meow.classList.add('visible');
-    setTimeout(() => meow.classList.remove('visible'), 1200);
-  }
+  // Animace
+  cat.style.transform = 'scale(1.08)';
+  setTimeout(() => cat.style.transform = 'rotate(0deg)', 250);
 
   if (clickCount === 3) {
-    localStorage.setItem('catClicked', 'true');
-    setTimeout(() => window.location.href = 'app.html', 1000);
+    meow.classList.add('visible');
+    sessionStorage.setItem('catClicked', 'true');
+    setTimeout(() => window.location.href = 'app.html', 1200);
   }
+});
+
+// Reset po návratu zpět nebo reloadu
+window.addEventListener('pageshow', () => {
+  clickCount = 0;
+  isTongue = false;
+  cat.src = 'cat.png';
+  meow.classList.remove('visible');
 });
