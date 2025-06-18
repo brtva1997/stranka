@@ -16,7 +16,7 @@ let clickCount = 0;
 let isTongue = false;
 let transitionDone = false;
 
-// 🚀 Okamžité reakce na mobilu i desktopu
+// 🚀 Okamžité reakce pro mobil & desktop
 cat.addEventListener('touchstart', handleClick, { passive: true });
 cat.addEventListener('mousedown', handleClick);
 
@@ -27,16 +27,15 @@ function handleClick() {
   isTongue = !isTongue;
   cat.src = isTongue ? images.tongue.src : images.normal.src;
 
-  document.querySelectorAll('.meow-pop').forEach(b => b.remove());
-
+  // ❤️ Místo bubliny vystřelíme srdce
   if (clickCount < 10) {
-    const bubble = document.createElement('div');
-    bubble.className = 'meow-pop';
-    bubble.textContent = 'MŇAU!';
-    bubble.style.left = `${Math.random() * 100 - 50}px`;
-    bubble.style.top = `${Math.random() * -50 - 10}px`;
-    catContainer.appendChild(bubble);
-    setTimeout(() => bubble.remove(), 1000);
+    const heart = document.createElement('div');
+    heart.className = 'meow-pop';
+    heart.textContent = '❤️';
+    heart.style.left = `${Math.random() * 100 - 50}px`;
+    heart.style.top = `${Math.random() * -50 - 10}px`;
+    catContainer.appendChild(heart);
+    setTimeout(() => heart.remove(), 800);
   }
 
   if (clickCount === 10) {
@@ -62,20 +61,20 @@ function handleClick() {
       document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
 
       setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-        heart.style.animationDuration = 6 + Math.random() * 4 + 's';
-        heart.textContent = '❤';
-        heartsContainer.appendChild(heart);
-        setTimeout(() => heart.remove(), 10000);
+        const fallHeart = document.createElement('div');
+        fallHeart.className = 'heart';
+        fallHeart.style.left = Math.random() * 100 + '%';
+        fallHeart.style.fontSize = Math.random() * 20 + 10 + 'px';
+        fallHeart.style.animationDuration = 6 + Math.random() * 4 + 's';
+        fallHeart.textContent = '❤';
+        heartsContainer.appendChild(fallHeart);
+        setTimeout(() => fallHeart.remove(), 10000);
       }, 400);
     }, 3200);
   }
 }
 
-// 🛡️ Blokace pinch zoom & double-tap zoom
+// 🛡️ Blokace pinch zoom a double-tapu
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
