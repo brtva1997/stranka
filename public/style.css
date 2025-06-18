@@ -2,20 +2,22 @@
 
 :root {
   --bg: #0b0016;
+  --bg-alt: #001a2e;
   --glass: rgba(255, 255, 255, 0.05);
-  --neon: #cb80ff;
-  --accent: #b366ff;
-  --paid-glow: #c299ff;
-  --unpaid-glow: #ffb3ff;
+  --purple: #cb80ff;
+  --cyan: #00d9ff;
+  --gradient: linear-gradient(135deg, var(--purple), var(--cyan));
+  --paid-glow: #a0f0ff;
+  --unpaid-glow: #ffbbff;
   --nearest-glow: #ffffff;
-  --text: #f4eaff;
+  --text: #e6e4f0;
 }
 
 body {
-  background: radial-gradient(ellipse at top, #1a002a, var(--bg));
-  color: var(--text);
-  font-family: 'Orbitron', sans-serif;
   margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at top left, var(--bg-alt), var(--bg));
+  color: var(--text);
   padding: 3rem 1rem;
   overflow-x: hidden;
   position: relative;
@@ -31,14 +33,14 @@ body {
 .heart {
   position: absolute;
   color: #ff80c0;
-  font-size: 20px;
+  font-size: 18px;
   animation: floatHeart 8s linear infinite;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 @keyframes floatHeart {
-  0% { transform: translateY(-5%) scale(1) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(110vh) scale(1.2) rotate(360deg); opacity: 0; }
+  0% { transform: translateY(-5%) scale(1) rotate(0); opacity: 1; }
+  100% { transform: translateY(110vh) scale(1.3) rotate(360deg); opacity: 0; }
 }
 
 #app {
@@ -47,26 +49,30 @@ body {
   max-width: 960px;
   margin: auto;
   background: var(--glass);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
   padding: 2rem;
-  border-radius: 18px;
-  box-shadow: 0 0 30px rgba(203, 128, 255, 0.3);
-  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.2), 0 0 40px rgba(203, 128, 255, 0.15);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 h2 {
+  font-size: 2rem;
   text-align: center;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 8px rgba(0,0,0,0.3);
   margin-bottom: 1.5rem;
-  color: var(--neon);
-  text-shadow: 0 0 8px var(--neon);
 }
 
 #summary {
   display: flex;
   justify-content: center;
-  gap: 2.5rem;
+  gap: 2rem;
   margin-bottom: 2rem;
-  font-size: 1.2rem;
+  text-align: center;
+  font-size: 1.1rem;
   color: var(--text);
   text-shadow: 0 0 4px rgba(255,255,255,0.1);
 }
@@ -74,26 +80,26 @@ h2 {
 table {
   width: 100%;
   border-collapse: collapse;
-  overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(203, 128, 255, 0.2);
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.2), 0 0 18px rgba(203, 128, 255, 0.2);
 }
 
 thead {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 th, td {
-  padding: 1.2rem;
+  padding: 1.1rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
   position: relative;
-  font-size: 1rem;
 }
 
 th {
-  color: var(--accent);
+  color: var(--cyan);
   text-transform: uppercase;
+  font-size: 0.9rem;
   letter-spacing: 0.1em;
 }
 
@@ -115,22 +121,22 @@ td:nth-child(3) {
 }
 
 tr.paid {
-  background: rgba(203, 128, 255, 0.04);
+  background: rgba(0, 255, 255, 0.03);
 }
 
 tr.unpaid {
-  background: rgba(255, 179, 255, 0.02);
+  background: rgba(255, 179, 255, 0.03);
 }
 
 tr.nearest-highlight {
-  border-left: 5px solid var(--nearest-glow);
+  border-left: 4px solid var(--nearest-glow);
   background: rgba(255, 255, 255, 0.05);
   animation: pulseBorder 2s infinite ease-in-out;
 }
 
 @keyframes pulseBorder {
   0%, 100% { box-shadow: 0 0 4px var(--nearest-glow); }
-  50% { box-shadow: 0 0 16px var(--nearest-glow); }
+  50% { box-shadow: 0 0 14px var(--nearest-glow); }
 }
 
 @media (max-width: 600px) {
@@ -138,12 +144,10 @@ tr.nearest-highlight {
     flex-direction: column;
     gap: 1rem;
   }
-
   th, td {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     padding: 0.8rem;
   }
-
   h2 {
     font-size: 1.6rem;
   }
