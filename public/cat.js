@@ -16,25 +16,30 @@ let clickCount = 0;
 let isTongue = false;
 let transitionDone = false;
 
-// 🚀 Okamžité reakce pro mobil & desktop
-cat.addEventListener('touchstart', handleClick, { passive: true });
-cat.addEventListener('mousedown', handleClick);
+// ⚡ Bleskové klikání pro mobil & desktop
+cat.addEventListener('pointerdown', handleClick);
 
-function handleClick() {
+function handleClick(event) {
   if (transitionDone) return;
+  event.stopPropagation();
+  event.preventDefault?.();
 
   clickCount++;
   isTongue = !isTongue;
   cat.src = isTongue ? images.tongue.src : images.normal.src;
 
-  // ❤️ Místo bubliny vystřelíme srdce
   if (clickCount < 10) {
     const heart = document.createElement('div');
     heart.className = 'meow-pop';
     heart.textContent = '❤️';
-    heart.style.left = `${Math.random() * 100 - 50}px`;
-    heart.style.top = `${Math.random() * -50 - 10}px`;
-    catContainer.appendChild(heart);
+
+    const rect = cat.getBoundingClientRect();
+    heart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 40 - 20)}px`;
+    heart.style.top = `${rect.top + (Math.random() * -20 - 20)}px`;
+
+    heart.style.position = 'absolute';
+    heart.style.zIndex = '9999';
+    document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 800);
   }
 
@@ -42,12 +47,7 @@ function handleClick() {
     transitionDone = true;
     cat.style.display = 'none';
     heartMsg.style.display = 'block';
-    heartMsg.classList.add('grow');
-
-    setTimeout(() => {
-      heartMsg.classList.remove('grow');
-      heartMsg.classList.add('explode');
-    }, 1800);
+    heartMsg.classList.add('big-heart');
 
     setTimeout(() => {
       heartMsg.style.display = 'none';
@@ -70,11 +70,11 @@ function handleClick() {
         heartsContainer.appendChild(fallHeart);
         setTimeout(() => fallHeart.remove(), 10000);
       }, 400);
-    }, 3200);
+    }, 2000);
   }
 }
 
-// 🛡️ Blokace pinch zoom a double-tapu
+// 🛡️ Blokace přiblížení
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
