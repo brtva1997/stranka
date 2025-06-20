@@ -11,21 +11,23 @@
 </head>
 <body>
 
+  <!-- Kočka na klikání -->
   <div id="cat-container">
     <img id="cat" src="cat.png" alt="Klikni na kočku" />
     <div id="heart-msg">💖</div>
   </div>
 
+  <!-- Létající srdíčka -->
   <div id="hearts-container"></div>
 
+  <!-- Skrytá aplikace odemknutá po 10 kliknutích -->
   <div id="app" class="hidden">
     <h2>Přehled týdenních splátek</h2>
     <div id="summary">
       <strong>Zaplaceno: <span id="paidAmount">£0.00</span></strong>
       <strong>Zbývá: <span id="unpaidAmount">£0.00</span></strong>
     </div>
-
-    <div id="monthly-sections"><!-- dynamicky vkládáno JS --></div>
+    <div id="monthly-sections"></div>
   </div>
 
   <script src="cat.js" type="module"></script>
