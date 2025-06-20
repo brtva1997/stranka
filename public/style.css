@@ -17,6 +17,10 @@ body {
   text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 #app {
   position: relative;
   max-width: 960px;
@@ -26,8 +30,9 @@ body {
   padding: 2rem;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
-              0 0 12px rgba(255, 112, 196, 0.08);
+  box-shadow:
+    0 0 30px rgba(203, 128, 255, 0.2),
+    0 0 12px rgba(255, 112, 196, 0.08);
 }
 
 h2 {
@@ -48,9 +53,10 @@ h2 {
   color: var(--pink);
 }
 
+/* Měsíční bloky */
 details {
   text-align: left;
-  margin: 1rem auto;
+  margin: 1.2rem auto;
   background: rgba(255, 255, 255, 0.03);
   padding: 1rem;
   border-radius: 8px;
@@ -65,15 +71,29 @@ summary {
   margin-bottom: 0.5rem;
 }
 
+/* Tabulky */
 table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
   word-break: break-word;
+  margin-top: 0.5rem;
 }
 
 th, td {
   padding: 0.8rem;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+td small {
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+/* Zvýrazněná splátka */
+.nearest-highlight {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 5px solid var(--heart);
+  transition: background 0.3s ease;
 }
