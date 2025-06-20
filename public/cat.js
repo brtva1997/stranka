@@ -1,3 +1,4 @@
+// Načítání splátek z payments.json a rozdělení podle měsíců
 fetch('payments.json')
   .then(res => res.json())
   .then(data => {
@@ -67,3 +68,39 @@ fetch('payments.json')
       currency: 'GBP'
     });
   });
+
+// Klikací animace na kočku: velké srdce, srdíčka a text
+const cat = document.getElementById('cat');
+const heartMsg = document.getElementById('heart-msg');
+const heartsContainer = document.getElementById('hearts-container');
+
+cat.addEventListener('click', () => {
+  // 💖 Velké srdce
+  heartMsg.style.display = 'block';
+  heartMsg.style.animation = 'inflateFade 1.1s ease-out';
+
+  setTimeout(() => {
+    heartMsg.style.display = 'none';
+    heartMsg.style.animation = '';
+  }, 1100);
+
+  // 💬 Text "Meow!" u kočky
+  const meow = document.createElement('div');
+  meow.className = 'meow-pop';
+  meow.style.left = `${cat.offsetLeft + 80}px`;
+  meow.style.top = `${cat.offsetTop - 20}px`;
+  meow.textContent = 'Meow!';
+  document.body.appendChild(meow);
+  setTimeout(() => meow.remove(), 800);
+
+  // 🫧 Plovoucí srdíčka
+  for (let i = 0; i < 4; i++) {
+    const floatHeart = document.createElement('div');
+    floatHeart.className = 'heart';
+    floatHeart.style.left = `${Math.random() * 90 + 5}%`;
+    floatHeart.style.fontSize = `${Math.random() * 1.4 + 0.6}rem`;
+    floatHeart.textContent = ['💖','💜','🩷','💕'][i % 4];
+    heartsContainer.appendChild(floatHeart);
+    setTimeout(() => floatHeart.remove(), 8000);
+  }
+});
