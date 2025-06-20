@@ -6,7 +6,7 @@
   --text: #f4eaff;
 }
 
-/* ZÁKLADNÍ POZADÍ */
+/* Základní pozadí a tělo */
 body {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
@@ -22,7 +22,7 @@ body {
   display: none;
 }
 
-/* KONTEJNER S KOČKOU */
+/* Kontejner s kočkou */
 #cat-container {
   position: absolute;
   top: 50%;
@@ -40,13 +40,35 @@ body {
   filter: drop-shadow(0 0 12px var(--pink));
   transition: transform 0.2s ease;
   touch-action: manipulation;
+  position: relative;
 }
 
 #cat:hover {
   transform: scale(1.05);
 }
 
-/* VELKÉ SRDCE UPROSTŘED */
+/* Vyplazený jazyk */
+#cat.tongue::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 14px;
+  background: radial-gradient(circle at 50% 20%, #ff6aa6, #d92e6a);
+  border-radius: 50% 50% 40% 40%;
+  animation: tongueWiggle 0.6s ease-out;
+  z-index: 1;
+}
+
+@keyframes tongueWiggle {
+  0%   { transform: translateX(-50%) scaleY(0.2); opacity: 0; }
+  40%  { transform: translateX(-50%) scaleY(1); opacity: 1; }
+  100% { transform: translateX(-50%) scaleY(0.2); opacity: 0; }
+}
+
+/* Velké srdce uprostřed */
 #heart-msg {
   display: none;
   position: fixed;
@@ -62,14 +84,14 @@ body {
   z-index: 9999;
 }
 
-/* ANIMACE PRO NAFOUKNUTÍ */
+/* Nafouknutí a zmizení */
 @keyframes inflateFade {
   0%   { transform: scale(0); opacity: 0; }
   60%  { transform: scale(1.5); opacity: 1; }
   100% { transform: scale(2); opacity: 0; filter: blur(6px); }
 }
 
-/* VZLÉTAJÍCÍ SRDÍČKA */
+/* Plovoucí srdíčka */
 .heart {
   position: absolute;
   top: -20px;
@@ -85,7 +107,7 @@ body {
   100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
 }
 
-/* TEXTOVÝ EFEKT PO KLIKU */
+/* Text "Meow!" při kliku */
 .meow-pop {
   position: absolute;
   color: var(--pink);
@@ -101,7 +123,7 @@ body {
   100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
 }
 
-/* ZVÝRAZNĚNÍ NEJBLIŽŠÍ SPLÁTKY */
+/* Zvýraznění nejbližší splátky */
 .nearest-highlight {
   background: rgba(255, 255, 255, 0.05);
   border-left: 5px solid var(--heart);
