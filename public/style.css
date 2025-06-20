@@ -1,9 +1,20 @@
 :root {
-  --glass: rgba(255,255,255,0.05);
+  --glass: rgba(255, 255, 255, 0.05);
   --cyan: #72c5ff;
   --pink: #ff70c4;
   --nearest-glow: #ffffff;
   --text: #f4eaff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(to bottom, #1a001f, #0b0016);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
 }
 
 #app {
@@ -18,14 +29,12 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
               0 0 12px rgba(255, 112, 196, 0.08);
-  overflow-x: hidden;
-  text-align: center;
 }
 
 h2 {
-  text-align: center;
   color: var(--cyan);
   text-shadow: 0 0 10px rgba(102, 224, 255, 0.4);
+  margin-bottom: 2rem;
 }
 
 #summary {
@@ -49,7 +58,6 @@ table {
   border-radius: 8px;
   table-layout: fixed;
   word-break: break-word;
-  overflow-x: hidden;
 }
 
 th, td {
@@ -59,7 +67,7 @@ th, td {
 }
 
 thead {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--cyan);
 }
 
@@ -75,7 +83,7 @@ thead {
 
 tr.nearest-highlight {
   border-left: 4px solid var(--nearest-glow);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   animation: pulseBorder 2s infinite ease-in-out;
   box-shadow: 0 0 12px rgba(255,255,255,0.08);
 }
