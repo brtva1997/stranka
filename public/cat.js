@@ -1,3 +1,53 @@
+let clickCount = 0;
+
+const cat = document.getElementById('cat');
+const heartMsg = document.getElementById('heart-msg');
+const heartsContainer = document.getElementById('hearts-container');
+const app = document.getElementById('app');
+
+cat.addEventListener('click', () => {
+  clickCount++;
+
+  // Přepnutí obrázku na cat2.png (s jazykem)
+  cat.src = 'cat2.png';
+  setTimeout(() => {
+    cat.src = 'cat.png';
+  }, 600);
+
+  // Velké 💖 srdce
+  heartMsg.style.display = 'block';
+  heartMsg.style.animation = 'inflateFade 1.1s ease-out';
+  setTimeout(() => {
+    heartMsg.style.display = 'none';
+    heartMsg.style.animation = '';
+  }, 1100);
+
+  // "Meow!" pop-up
+  const meow = document.createElement('div');
+  meow.className = 'meow-pop';
+  meow.style.left = `${cat.offsetLeft + 80}px`;
+  meow.style.top = `${cat.offsetTop - 20}px`;
+  meow.textContent = 'Meow!';
+  document.body.appendChild(meow);
+  setTimeout(() => meow.remove(), 800);
+
+  // Létající srdíčka
+  for (let i = 0; i < 4; i++) {
+    const floatHeart = document.createElement('div');
+    floatHeart.className = 'heart';
+    floatHeart.style.left = `${Math.random() * 90 + 5}%`;
+    floatHeart.style.fontSize = `${Math.random() * 1.4 + 0.6}rem`;
+    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][i % 4];
+    heartsContainer.appendChild(floatHeart);
+    setTimeout(() => floatHeart.remove(), 8000);
+  }
+
+  // Odemknutí splátkového kalendáře
+  if (clickCount === 10) {
+    app.classList.remove('hidden');
+  }
+});
+// 📥 Načtení splátek z payments.json
 fetch('payments.json')
   .then(res => res.json())
   .then(data => {
@@ -6,9 +56,10 @@ fetch('payments.json')
     let paidTotal = 0;
     let unpaidTotal = 0;
 
+    // Rozdělení dat podle měsíců
     data.forEach(entry => {
       const date = new Date(entry.date);
-      const monthKey = date.toISOString().slice(0, 7);
+      const monthKey = date.toISOString().slice(0, 7); // např. "2025-07"
       if (!months[monthKey]) months[monthKey] = [];
       months[monthKey].push(entry);
 
@@ -16,6 +67,7 @@ fetch('payments.json')
       else unpaidTotal += entry.amount;
     });
 
+    // Vykreslení měsíčních sekcí
     Object.entries(months).forEach(([monthKey, entries]) => {
       const [y, m] = monthKey.split('-');
       const title = new Date(`${y}-${m}-01`).toLocaleDateString('cs-CZ', {
@@ -50,6 +102,7 @@ fetch('payments.json')
       container.appendChild(section);
     });
 
+    // 💰 Souhrn částek
     document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
       style: 'currency', currency: 'GBP'
     });
@@ -58,50 +111,3 @@ fetch('payments.json')
       style: 'currency', currency: 'GBP'
     });
   });
-let clickCount = 0;
-
-const cat = document.getElementById('cat');
-const heartMsg = document.getElementById('heart-msg');
-const heartsContainer = document.getElementById('hearts-container');
-const app = document.getElementById('app');
-
-cat.addEventListener('click', () => {
-  clickCount++;
-
-  // 👅 Jazyk
-  cat.classList.add('tongue');
-  setTimeout(() => cat.classList.remove('tongue'), 600);
-
-  // 💖 Velké srdce
-  heartMsg.style.display = 'block';
-  heartMsg.style.animation = 'inflateFade 1.1s ease-out';
-  setTimeout(() => {
-    heartMsg.style.display = 'none';
-    heartMsg.style.animation = '';
-  }, 1100);
-
-  // 💬 Meow pop
-  const meow = document.createElement('div');
-  meow.className = 'meow-pop';
-  meow.style.left = `${cat.offsetLeft + 80}px`;
-  meow.style.top = `${cat.offsetTop - 20}px`;
-  meow.textContent = 'Meow!';
-  document.body.appendChild(meow);
-  setTimeout(() => meow.remove(), 800);
-
-  // 🫧 Srdíčka
-  for (let i = 0; i < 4; i++) {
-    const floatHeart = document.createElement('div');
-    floatHeart.className = 'heart';
-    floatHeart.style.left = `${Math.random() * 90 + 5}%`;
-    floatHeart.style.fontSize = `${Math.random() * 1.4 + 0.6}rem`;
-    floatHeart.textContent = ['💖','💜','🩷','💕'][i % 4];
-    heartsContainer.appendChild(floatHeart);
-    setTimeout(() => floatHeart.remove(), 8000);
-  }
-
-  // 🔓 Odemknutí app po 10. kliknutí
-  if (clickCount === 10) {
-    app.classList.remove('hidden');
-  }
-});
