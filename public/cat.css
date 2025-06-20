@@ -6,6 +6,7 @@
   --text: #f4eaff;
 }
 
+/* ZÁKLADNÍ POZADÍ */
 body {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
@@ -21,6 +22,7 @@ body {
   display: none;
 }
 
+/* KONTEJNER S KOČKOU */
 #cat-container {
   position: absolute;
   top: 50%;
@@ -44,6 +46,46 @@ body {
   transform: scale(1.05);
 }
 
+/* VELKÉ SRDCE UPROSTŘED */
+#heart-msg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  font-size: 30vw;
+  line-height: 1;
+  color: var(--heart);
+  text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ANIMACE PRO NAFOUKNUTÍ */
+@keyframes inflateFade {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; filter: blur(6px); }
+}
+
+/* VZLÉTAJÍCÍ SRDÍČKA */
+.heart {
+  position: absolute;
+  top: -20px;
+  animation: floatHeart 8s linear forwards;
+  color: var(--pink);
+  opacity: 0.8;
+  pointer-events: none;
+  font-size: 1.2rem;
+}
+
+@keyframes floatHeart {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
+}
+
+/* TEXTOVÝ EFEKT PO KLIKU */
 .meow-pop {
   position: absolute;
   color: var(--pink);
@@ -59,40 +101,9 @@ body {
   100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
 }
 
-#heart-msg {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 30vw;
-  line-height: 1;
-  color: var(--heart);
-  text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.big-heart {
-  animation: inflateFade 1.8s forwards ease-in-out;
-}
-
-@keyframes inflateFade {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.5); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; filter: blur(6px); }
-}
-
-.heart {
-  position: absolute;
-  top: -20px;
-  animation: floatHeart 8s linear forwards;
-  color: var(--pink);
-  opacity: 0.8;
-  pointer-events: none;
-}
-
-@keyframes floatHeart {
-  0%   { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
+/* ZVÝRAZNĚNÍ NEJBLIŽŠÍ SPLÁTKY */
+.nearest-highlight {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 5px solid var(--heart);
+  transition: background 0.3s ease;
 }

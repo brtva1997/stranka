@@ -1,85 +1,45 @@
-const images = {
-  normal: new Image(),
-  tongue: new Image()
-};
-images.normal.src = 'cat.png';
-images.tongue.src = 'cat2.png';
+fetch('payments.json')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('monthly-sections');
+    const months = {};
 
-const cat = document.getElementById('cat');
-const catContainer = document.getElementById('cat-container');
-const heartMsg = document.getElementById('heart-msg');
-const app = document.getElementById('app');
-const heartsContainer = document.getElementById('hearts-container');
+    let paidTotal = 0;
+    let unpaidTotal = 0;
 
-let clickCount = 0;
-let isTongue = false;
-let transitionDone = false;
+    data.forEach(entry => {
+      const date = new Date(entry.date);
+      const monthKey = date.toISOString().slice(0, 7);
+      if (!months[monthKey]) months[monthKey] = [];
+      months[monthKey].push(entry);
 
-cat.addEventListener('pointerdown', handleClick);
+      if (entry.status === 'paid') paidTotal += entry.amount;
+      else unpaidTotal += entry.amount;
+    });
 
-function handleClick(event) {
-  if (transitionDone) return;
-  event.stopPropagation();
-  event.preventDefault?.();
+    Object.entries(months).forEach(([monthKey, entries]) => {
+      const [y, m] = monthKey.split('-');
+      const title = new Date(`${y}-${m}-01`).toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' });
 
-  clickCount++;
-  isTongue = !isTongue;
-  cat.src = isTongue ? images.tongue.src : images.normal.src;
+      const section = document.createElement('details');
+      section.innerHTML = `<summary>${title}</summary>
+      <table>
+        <thead><tr><th>Datum</th><th>Popis</th><th>Status</th><th>Částka</th></tr></thead>
+        <tbody>
+          ${entries.map(e => {
+            const d = new Date(e.date).toLocaleDateString('cs-CZ');
+            const stat = e.status === 'paid' ? '✅' : e.status === 'nearest' ? '⌛' : '';
+            const cls = e.status === 'paid' ? 'paid' : (e.status === 'nearest' ? 'nearest-highlight' : 'unpaid');
+            return `<tr class="${cls}" data-amount="${e.amount}">
+              <td>${d}</td><td>${e.label}</td><td>${stat}</td>
+              <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+      container.appendChild(section);
+    });
 
-  if (clickCount < 10) {
-    const heart = document.createElement('div');
-    heart.className = 'meow-pop';
-    heart.textContent = '❤️';
-    const rect = cat.getBoundingClientRect();
-    heart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 40 - 20)}px`;
-    heart.style.top = `${rect.top + (Math.random() * -20 - 20)}px`;
-    heart.style.position = 'absolute';
-    heart.style.zIndex = '9999';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 800);
-  }
-
-  if (clickCount === 10) {
-    transitionDone = true;
-    cat.style.display = 'none';
-    heartMsg.textContent = '💖';
-    heartMsg.style.display = 'block';
-    heartMsg.classList.add('big-heart');
-
-    setTimeout(() => {
-      heartMsg.style.display = 'none';
-      app.classList.remove('hidden');
-
-      document.querySelectorAll('.amount').forEach(cell => {
-        const amount = Number(cell.dataset.amount || 0);
-        cell.textContent = amount.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
-      });
-
-      const paidRows = [...document.querySelectorAll('tr.paid')];
-      const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
-      const paidSum = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-      const unpaidSum = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-
-      document.getElementById('paidAmount').textContent = paidSum.toLocaleString('en-GB', {
-        style: 'currency',
-        currency: 'GBP'
-      });
-      document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString('en-GB', {
-        style: 'currency',
-        currency: 'GBP'
-      });
-
-      setInterval(() => {
-        const fallHeart = document.createElement('div');
-        fallHeart.className = 'heart';
-        fallHeart.style.left = Math.random() * 100 + '%';
-        fallHeart.style.fontSize = Math.random() * 20 + 10 + 'px';
-        fallHeart.style.animationDuration = 6 + Math.random() * 4 + 's';
-        fallHeart.style.color = '#ffdde5';
-        fallHeart.textContent = '❤';
-        heartsContainer.appendChild(fallHeart);
-        setTimeout(() => fallHeart.remove(), 10000);
-      }, 400);
-    }, 2000);
-  }
-}
+    document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+    document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+  });

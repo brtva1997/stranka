@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kočičí splátky</title>
   <link rel="stylesheet" href="cat.css" />
   <link rel="stylesheet" href="style.css" />
@@ -11,68 +11,21 @@
 </head>
 <body>
 
-  <!-- 🐱 Klikací kočka -->
   <div id="cat-container">
     <img id="cat" src="cat.png" alt="Klikni na kočku" />
-    <div id="heart-msg"></div>
+    <div id="heart-msg">💖</div>
   </div>
 
-  <!-- ❤️ Padající srdíčka -->
   <div id="hearts-container"></div>
 
-  <!-- 📊 Aplikace se splátkami -->
   <div id="app" class="hidden">
     <h2>Přehled týdenních splátek</h2>
-
     <div id="summary">
       <strong>Zaplaceno: <span id="paidAmount">£0.00</span></strong>
       <strong>Zbývá: <span id="unpaidAmount">£0.00</span></strong>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Popis</th>
-          <th>Status</th>
-          <th>Částka</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 💰 Prvních 2 splátky již zaplacené -->
-        <tr class="paid" data-amount="45">
-          <td>07.06.2025</td>
-          <td>Týdenní splátka</td>
-          <td></td>
-          <td class="amount" data-amount="45">£125<br /><small style="opacity:0.7;">(£80 nájem + £45 splátka)</small></td>
-        </tr>
-        <tr class="paid" data-amount="45">
-          <td>14.06.2025</td>
-          <td>Týdenní splátka</td>
-          <td></td>
-          <td class="amount" data-amount="45">£125<br /><small style="opacity:0.7;">(£80 nájem + £45 splátka)</small></td>
-        </tr>
-
-        <!-- 📅 Nejbližší nezaplacená -->
-        <tr class="unpaid nearest-highlight" data-amount="45">
-          <td>21.06.2025</td>
-          <td>Týdenní splátka</td>
-          <td></td>
-          <td class="amount" data-amount="45">£125<br /><small style="opacity:0.7;">(£80 nájem + £45 splátka)</small></td>
-        </tr>
-
-        <!-- 📆 Budoucí splátky – dohromady 66 zbývajících -->
-        <!-- ⚠️ Pozn.: V reálné stránce sem dosadíš 66 řádků od 28.06.2025 dále, celkem 69 splátek × £45 = £3105 -->
-        <!-- Ukázka: -->
-        <tr class="unpaid" data-amount="45">
-          <td>28.06.2025</td>
-          <td>Týdenní splátka</td>
-          <td></td>
-          <td class="amount" data-amount="45">£125<br /><small style="opacity:0.7;">(£80 nájem + £45 splátka)</small></td>
-        </tr>
-        <!-- ... pokračovat až do splacení -->
-      </tbody>
-    </table>
+    <div id="monthly-sections"><!-- dynamicky vkládáno JS --></div>
   </div>
 
   <script src="cat.js" type="module"></script>
