@@ -1,16 +1,14 @@
-// Načítání splátek z payments.json a rozdělení podle měsíců
 fetch('payments.json')
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById('monthly-sections');
     const months = {};
-
     let paidTotal = 0;
     let unpaidTotal = 0;
 
     data.forEach(entry => {
       const date = new Date(entry.date);
-      const monthKey = date.toISOString().slice(0, 7); // např. "2025-06"
+      const monthKey = date.toISOString().slice(0, 7);
       if (!months[monthKey]) months[monthKey] = [];
       months[monthKey].push(entry);
 
@@ -35,56 +33,54 @@ fetch('payments.json')
           <tbody>
             ${entries.map(e => {
               const d = new Date(e.date).toLocaleDateString('cs-CZ');
-              const statusSymbol = e.status === 'paid' ? '✅' :
-                                   e.status === 'nearest' ? '⌛' : '';
-              const rowClass = e.status === 'paid' ? 'paid' :
-                               e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
-
+              const status = e.status === 'paid' ? '✅' :
+                             e.status === 'nearest' ? '⌛' : '';
+              const cls = e.status === 'paid' ? 'paid' :
+                          e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
               return `
-                <tr class="${rowClass}" data-amount="${e.amount}">
+                <tr class="${cls}" data-amount="${e.amount}">
                   <td>${d}</td>
                   <td>${e.label}</td>
-                  <td>${statusSymbol}</td>
-                  <td>
-                    £125<br />
-                    <small>(£80 nájem + £${e.amount} splátka)</small>
-                  </td>
-                </tr>
-              `;
+                  <td>${status}</td>
+                  <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
+                </tr>`;
             }).join('')}
           </tbody>
-        </table>
-      `;
+        </table>`;
       container.appendChild(section);
     });
 
     document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
-      style: 'currency',
-      currency: 'GBP'
+      style: 'currency', currency: 'GBP'
     });
 
     document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', {
-      style: 'currency',
-      currency: 'GBP'
+      style: 'currency', currency: 'GBP'
     });
   });
+let clickCount = 0;
 
-// Klikací animace na kočku: velké srdce, srdíčka a text
 const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const heartsContainer = document.getElementById('hearts-container');
+const app = document.getElementById('app');
 
 cat.addEventListener('click', () => {
+  clickCount++;
+
+  // 👅 Jazyk
+  cat.classList.add('tongue');
+  setTimeout(() => cat.classList.remove('tongue'), 600);
+
   // 💖 Velké srdce
   heartMsg.style.display = 'block';
   heartMsg.style.animation = 'inflateFade 1.1s ease-out';
-
   setTimeout(() => {
     heartMsg.style.display = 'none';
     heartMsg.style.animation = '';
   }, 1100);
 
-  // 💬 Text "Meow!" u kočky
+  // 💬 Meow pop
   const meow = document.createElement('div');
   meow.className = 'meow-pop';
   meow.style.left = `${cat.offsetLeft + 80}px`;
@@ -93,7 +89,7 @@ cat.addEventListener('click', () => {
   document.body.appendChild(meow);
   setTimeout(() => meow.remove(), 800);
 
-  // 🫧 Plovoucí srdíčka
+  // 🫧 Srdíčka
   for (let i = 0; i < 4; i++) {
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
@@ -102,5 +98,10 @@ cat.addEventListener('click', () => {
     floatHeart.textContent = ['💖','💜','🩷','💕'][i % 4];
     heartsContainer.appendChild(floatHeart);
     setTimeout(() => floatHeart.remove(), 8000);
+  }
+
+  // 🔓 Odemknutí app po 10. kliknutí
+  if (clickCount === 10) {
+    app.classList.remove('hidden');
   }
 });
