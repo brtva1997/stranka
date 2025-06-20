@@ -1,6 +1,6 @@
 :root {
   --glass: rgba(255,255,255,0.05);
-  --cyan: #66e0ff;
+  --cyan: #72c5ff; /* upravená modrá místo původní cyan */
   --pink: #ff70c4;
   --nearest-glow: #ffffff;
   --text: #f4eaff;
@@ -18,7 +18,8 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
               0 0 12px rgba(255, 112, 196, 0.08);
-  overflow-x: auto;
+  overflow-x: hidden;
+  text-align: center;
 }
 
 h2 {
@@ -34,19 +35,20 @@ h2 {
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
-
 #summary strong {
   color: var(--pink);
 }
 
 table {
   width: 100%;
-  min-width: 320px;
-  border-collapse: collapse;
+  max-width: 720px;
   margin: 0 auto;
+  border-collapse: collapse;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
   table-layout: fixed;
+  word-break: break-word;
+  overflow-x: hidden;
 }
 
 th, td {
@@ -76,7 +78,6 @@ tr.nearest-highlight {
   background: rgba(255,255,255,0.05);
   animation: pulseBorder 2s infinite ease-in-out;
   box-shadow: 0 0 12px rgba(255,255,255,0.08);
-  transition: background 0.3s ease;
 }
 
 @keyframes pulseBorder {
@@ -87,8 +88,6 @@ tr.nearest-highlight {
 @media (max-width: 600px) {
   table {
     font-size: 0.78rem;
-    table-layout: fixed;
-    word-break: break-word;
   }
 
   th, td {

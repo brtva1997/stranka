@@ -16,7 +16,6 @@ let clickCount = 0;
 let isTongue = false;
 let transitionDone = false;
 
-// ⚡ Bleskové klikání pro mobil & desktop
 cat.addEventListener('pointerdown', handleClick);
 
 function handleClick(event) {
@@ -36,9 +35,9 @@ function handleClick(event) {
     const rect = cat.getBoundingClientRect();
     heart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 40 - 20)}px`;
     heart.style.top = `${rect.top + (Math.random() * -20 - 20)}px`;
-
     heart.style.position = 'absolute';
     heart.style.zIndex = '9999';
+
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 800);
   }
@@ -57,8 +56,13 @@ function handleClick(event) {
       const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
       const paidSum = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
       const unpaidSum = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
-      document.getElementById('paidAmount').textContent = paidSum.toLocaleString();
-      document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString();
+
+      document.getElementById('paidAmount').textContent = paidSum.toLocaleString('en-GB', {
+        style: 'currency', currency: 'GBP'
+      });
+      document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString('en-GB', {
+        style: 'currency', currency: 'GBP'
+      });
 
       setInterval(() => {
         const fallHeart = document.createElement('div');
@@ -66,6 +70,7 @@ function handleClick(event) {
         fallHeart.style.left = Math.random() * 100 + '%';
         fallHeart.style.fontSize = Math.random() * 20 + 10 + 'px';
         fallHeart.style.animationDuration = 6 + Math.random() * 4 + 's';
+        fallHeart.style.color = '#ffdde5';
         fallHeart.textContent = '❤';
         heartsContainer.appendChild(fallHeart);
         setTimeout(() => fallHeart.remove(), 10000);
@@ -74,7 +79,6 @@ function handleClick(event) {
   }
 }
 
-// 🛡️ Blokace přiblížení
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
