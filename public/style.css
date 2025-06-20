@@ -1,6 +1,6 @@
 :root {
   --glass: rgba(255,255,255,0.05);
-  --cyan: #72c5ff; /* upravená modrá místo původní cyan */
+  --cyan: #72c5ff;
   --pink: #ff70c4;
   --nearest-glow: #ffffff;
   --text: #f4eaff;
@@ -35,6 +35,7 @@ h2 {
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
+
 #summary strong {
   color: var(--pink);
 }
@@ -55,7 +56,6 @@ th, td {
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.04);
   text-align: center;
-  word-break: break-word;
 }
 
 thead {

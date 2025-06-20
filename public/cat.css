@@ -2,45 +2,32 @@
   --bg: #0b0016;
   --bg-alt: #1a001f;
   --pink: #ff70c4;
-  --heart: #ffd700;
+  --heart: #ffee99;
   --text: #f4eaff;
 }
 
-body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(to bottom, var(--bg-alt), var(--bg));
-  color: var(--text);
-  overflow: hidden;
-  min-height: 100vh;
-  padding: 2rem;
-  position: relative;
-}
-
-.hidden {
+#heart-msg {
   display: none;
-}
-
-#cat-container {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
+  font-size: 30vw;
+  line-height: 1;
+  color: var(--heart);
+  text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
+  pointer-events: none;
+  z-index: 9999;
 }
 
-#cat {
-  width: 240px;
-  cursor: pointer;
-  filter: drop-shadow(0 0 12px var(--pink));
-  transition: transform 0.2s ease;
-  touch-action: manipulation;
+.big-heart {
+  animation: inflateFade 1.8s forwards ease-in-out;
 }
-#cat:hover {
-  transform: scale(1.05);
+
+@keyframes inflateFade {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; filter: blur(6px); }
 }
 
 .meow-pop {
@@ -52,37 +39,8 @@ body {
   text-shadow: 0 0 8px #fff;
   z-index: 9999;
 }
+
 @keyframes fadePop {
   0%   { opacity: 1; transform: translateY(0) scale(1); }
   100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
-}
-
-#heart-msg {
-  display: none;
-  font-size: 40vw;
-  line-height: 1;
-  color: var(--heart);
-  text-shadow: 0 0 36px var(--heart);
-}
-
-.big-heart {
-  animation: inflateFade 1.8s forwards ease-in-out;
-}
-@keyframes inflateFade {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.5); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; filter: blur(6px); }
-}
-
-.heart {
-  position: absolute;
-  top: -20px;
-  animation: floatHeart 8s linear forwards;
-  color: var(--pink);
-  opacity: 0.8;
-  pointer-events: none;
-}
-@keyframes floatHeart {
-  0%   { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
 }

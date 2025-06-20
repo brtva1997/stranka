@@ -1,4 +1,3 @@
-// 🔁 Přednačtení obrázků
 const images = {
   normal: new Image(),
   tongue: new Image()
@@ -31,13 +30,11 @@ function handleClick(event) {
     const heart = document.createElement('div');
     heart.className = 'meow-pop';
     heart.textContent = '❤️';
-
     const rect = cat.getBoundingClientRect();
     heart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 40 - 20)}px`;
     heart.style.top = `${rect.top + (Math.random() * -20 - 20)}px`;
     heart.style.position = 'absolute';
     heart.style.zIndex = '9999';
-
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 800);
   }
@@ -45,6 +42,7 @@ function handleClick(event) {
   if (clickCount === 10) {
     transitionDone = true;
     cat.style.display = 'none';
+    heartMsg.textContent = '💖';
     heartMsg.style.display = 'block';
     heartMsg.classList.add('big-heart');
 
@@ -52,16 +50,23 @@ function handleClick(event) {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
 
+      document.querySelectorAll('.amount').forEach(cell => {
+        const amount = Number(cell.dataset.amount || 0);
+        cell.textContent = amount.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+      });
+
       const paidRows = [...document.querySelectorAll('tr.paid')];
       const unpaidRows = [...document.querySelectorAll('tr.unpaid')];
       const paidSum = paidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
       const unpaidSum = unpaidRows.reduce((sum, row) => sum + Number(row.dataset.amount), 0);
 
       document.getElementById('paidAmount').textContent = paidSum.toLocaleString('en-GB', {
-        style: 'currency', currency: 'GBP'
+        style: 'currency',
+        currency: 'GBP'
       });
       document.getElementById('unpaidAmount').textContent = unpaidSum.toLocaleString('en-GB', {
-        style: 'currency', currency: 'GBP'
+        style: 'currency',
+        currency: 'GBP'
       });
 
       setInterval(() => {
@@ -78,14 +83,3 @@ function handleClick(event) {
     }, 2000);
   }
 }
-
-document.addEventListener('touchstart', (e) => {
-  if (e.touches.length > 1) e.preventDefault();
-}, { passive: false });
-
-let lastTouchEnd = 0;
-document.addEventListener('touchend', (e) => {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) e.preventDefault();
-  lastTouchEnd = now;
-});
