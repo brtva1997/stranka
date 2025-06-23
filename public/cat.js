@@ -7,14 +7,12 @@ const app = document.getElementById('app');
 const catContainer = document.getElementById('cat-container');
 // 💳 Načtení a zobrazení splátek
 function loadPayments() {
-  
   fetch('payments.json')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('monthly-sections');
       let totalDebt = 3300;
       let paidTotal = 0;
-      let unpaidTotal = 0;
 
       const table = document.createElement('table');
       table.innerHTML = `
@@ -29,22 +27,23 @@ function loadPayments() {
         <tbody>
           ${data.map(e => {
             const d = new Date(e.date).toLocaleDateString('cs-CZ');
-            const statusIcon = e.status === 'paid' ? '✅'
-                   : e.status === 'nearest' ? '⌛'
-                   : '➖';
+            const isPaid = e.status === 'paid';
+            const isNearest = e.status === 'nearest';
 
-const cls = e.status === 'paid' ? 'paid'
-           : e.status === 'nearest' ? 'nearest-highlight'
-           : 'unpaid';
+            if (isPaid) {
+              paidTotal += e.amount;
+              totalDebt -= e.amount;
+            }
 
-           if (e.status === 'paid') {
-            paidTotal += e.amount;
-            totalDebt -= e.amount;
-          }
-            else unpaidTotal += e.amount;
+            const statusIcon = isPaid ? '✅' : isNearest ? '⌛' : '➖';
+            const rowClass = isPaid
+              ? 'paid'
+              : isNearest
+              ? 'nearest-highlight'
+              : 'unpaid';
 
             return `
-              <tr class="${cls}">
+              <tr class="${rowClass}">
                 <td>${d}</td>
                 <td>${statusIcon}</td>
                 <td>£80 nájem + £${e.amount} splátka</td>
@@ -54,19 +53,21 @@ const cls = e.status === 'paid' ? 'paid'
         </tbody>
       `;
 
-      container.innerHTML = ''; // vyčistíme kontejner
+      container.innerHTML = '';
       container.appendChild(table);
 
+      document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
+        style: 'currency',
+        currency: 'GBP'
+      });
+
       document.getElementById('unpaidAmount').textContent = totalDebt.toLocaleString('en-GB', {
-  style: 'currency',
-  currency: 'GBP'
-});
-      document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', {
         style: 'currency',
         currency: 'GBP'
       });
     });
 }
+
 
 
 // 💖 Padající pozadí
