@@ -7,6 +7,7 @@ const app = document.getElementById('app');
 
 cat.addEventListener('click', () => {
   clickCount++;
+
   if (clickCount <= 10) {
     cat.src = 'cat2.png';
     clearTimeout(revertTimeout);
@@ -17,19 +18,15 @@ cat.addEventListener('click', () => {
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
-    floatHeart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 60 - 30)}px`;
-    floatHeart.style.top = `${rect.top + rect.height / 2 + (Math.random() * 40 - 20)}px`;
-    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][clickCount % 4];
-    floatHeart.style.transition = 'opacity 0.6s ease';
+    floatHeart.style.left = `${rect.left + rect.width / 2}px`;
+    floatHeart.style.top = `${rect.top + rect.height / 2}px`;
+    floatHeart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
+    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
+    floatHeart.style.transition = 'opacity 0.4s ease';
     document.body.appendChild(floatHeart);
 
-    setTimeout(() => floatHeart.style.opacity = '0', 5000);
-    setTimeout(() => floatHeart.remove(), 5800);
-
-    floatHeart.addEventListener('click', () => {
-      floatHeart.style.opacity = '0';
-      setTimeout(() => floatHeart.remove(), 500);
-    });
+    setTimeout(() => floatHeart.style.opacity = '0', 100);
+    setTimeout(() => floatHeart.remove(), 500);
   }
 
   if (clickCount === 10) {
@@ -76,7 +73,7 @@ fetch('payments.json')
         <summary>${title}</summary>
         <table>
           <thead>
-            <tr><th>Datum</th><th>Popis</th><th>Status</th><th>Částka</th></tr>
+            <tr><th>Datum</th><th>Status</th><th>Částka</th></tr>
           </thead>
           <tbody>
             ${entries.map(e => {
@@ -88,7 +85,6 @@ fetch('payments.json')
               return `
                 <tr class="${cls}">
                   <td>${d}</td>
-                  <td>${e.label}</td>
                   <td>${status}</td>
                   <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
                 </tr>`;
@@ -102,6 +98,7 @@ fetch('payments.json')
       style: 'currency',
       currency: 'GBP'
     });
+
     document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', {
       style: 'currency',
       currency: 'GBP'
