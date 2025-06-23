@@ -1,6 +1,6 @@
 :root {
-  --bg: #1a1d22;
-  --panel: #292c35dd;
+  --bg: linear-gradient(160deg, #1a0028, #440057, #140018);
+  --panel: rgba(34, 0, 48, 0.8);
   --white: #ffffff;
   --pink: #ff78c4;
   --heart: #ff6ec7;
@@ -8,24 +8,34 @@
   --unpaid: #ffb5b5;
   --paid: #5cffad;
   --nearest: #ffee85;
-  --text: #f0f0f0;
+  --text: #e8e8ff;
   font-family: 'Orbitron', sans-serif;
 }
 
 body {
-  background: linear-gradient(160deg, #1a1d27, #2c2f48 60%, #0f0f1c);
+  background: var(--bg);
   color: var(--text);
   margin: 0;
   padding: 0;
   font-size: 15px;
-  line-height: 1.4;
   min-height: 100vh;
+  line-height: 1.4;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  overflow-x: hidden;
 }
 
+#cat-container {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  text-align: center;
+  width: 100%;
+}
 
 h2 {
   text-align: center;
@@ -54,29 +64,34 @@ h2 {
 }
 
 details {
-  background: #2e323e;
+  background: #2e1c3d;
   border-radius: 8px;
   margin-bottom: 1rem;
-  box-shadow: 0 0 14px rgba(255,255,255,0.08);
+  box-shadow: 0 0 14px rgba(255,255,255,0.05);
   overflow: hidden;
 }
 
 summary {
   cursor: pointer;
   padding: 10px 16px;
-  background: #3c3f4d;
+  background: #3c1f4d;
   color: var(--white);
   font-weight: bold;
   font-size: 1rem;
+  text-shadow: 0 0 4px var(--pink);
 }
 
 table {
-  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.9rem;
+  table-layout: fixed;
+  margin-bottom: 0.5rem;
 }
 
-td, th {
+th, td {
+  padding: 0.6rem;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -89,20 +104,26 @@ thead {
 }
 
 tr.paid {
-  background: rgba(40, 160, 90, 0.15);
+  background: rgba(40, 160, 90, 0.1);
   color: var(--paid);
 }
 
 tr.unpaid {
-  background: rgba(255, 80, 80, 0.15);
+  background: rgba(255, 80, 80, 0.08);
   color: var(--unpaid);
 }
 
 tr.nearest-highlight {
-  background: rgba(255, 255, 100, 0.15);
+  background: rgba(255, 255, 120, 0.15);
   color: var(--nearest);
   font-weight: bold;
   text-shadow: 0 0 6px var(--nearest);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0px var(--nearest); }
+  50%      { box-shadow: 0 0 16px var(--nearest); }
 }
 
 .hidden {

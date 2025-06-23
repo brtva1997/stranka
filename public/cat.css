@@ -1,21 +1,26 @@
 #cat-container {
-  margin-top: 2rem;
+  position: relative;
   text-align: center;
+  margin-top: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 
 #cat {
   width: 180px;
   height: auto;
   cursor: pointer;
   transition: transform 0.2s ease;
+  filter: drop-shadow(0 0 12px var(--pink));
 }
 
 #cat:active {
   transform: scale(1.04);
 }
 
-/* Velké srdce ve středu obrazovky */
+/* Velké srdce uprostřed obrazovky */
 #heart-msg {
   display: none;
   position: fixed;
@@ -23,7 +28,9 @@
   margin: auto;
   font-size: 30vw;
   color: var(--heart);
-  text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
+  text-shadow:
+    0 0 36px var(--heart),
+    0 0 60px #ffdd55;
   pointer-events: none;
   z-index: 9999;
 }
@@ -34,7 +41,7 @@
   100% { transform: scale(2); opacity: 0; filter: blur(6px); }
 }
 
-/* Létající malá srdíčka */
+/* Létající srdíčka */
 .heart {
   position: absolute;
   top: -20px;
@@ -42,6 +49,7 @@
   opacity: 0.8;
   pointer-events: none;
   z-index: 1000;
+  text-shadow: 0 0 6px var(--heart);
 }
 
 @keyframes floatHeart {
