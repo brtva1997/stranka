@@ -53,6 +53,9 @@ html, body {
   border-bottom: 1px solid #444;
   backdrop-filter: blur(12px);
 }
+.hidden {
+  display: none !important;
+}
 
 #app-header h2 {
   margin: 0 0 0.5rem;
