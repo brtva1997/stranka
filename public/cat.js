@@ -4,7 +4,7 @@ let revertTimeout;
 const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
-
+const catContainer = document.getElementById('cat-container');
 // 💳 Načtení a zobrazení splátek
 function loadPayments() {
   fetch('payments.json')
@@ -116,6 +116,7 @@ cat.addEventListener('click', () => {
     heartMsg.style.animation = 'inflateFade 1.8s ease-out';
 
     setTimeout(() => {
+      catContainer.classList.add('hidden');
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
       loadPayments();
