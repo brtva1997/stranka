@@ -5,7 +5,7 @@ const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
 
-// 🧩 Funkce pro načtení splátek (volá se až po 10. kliknutí)
+// 💳 Načtení a zobrazení splátek
 function loadPayments() {
   fetch('payments.json')
     .then(res => res.json())
@@ -32,7 +32,7 @@ function loadPayments() {
         });
 
         const section = document.createElement('details');
-        section.setAttribute('open', ''); // vždy otevřené – výška se nemění
+        section.setAttribute('open', '');
 
         section.innerHTML = `
           <summary>${title}</summary>
@@ -71,7 +71,21 @@ function loadPayments() {
     });
 }
 
-// 🐱 Klikání na kočku a efekty
+// 💖 Padající pozadí
+function spawnBackgroundHearts() {
+  const container = document.getElementById('background-hearts');
+  setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'falling-heart';
+    heart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
+    heart.style.left = `${Math.random() * 100}vw`;
+    heart.style.animationDuration = `${4 + Math.random() * 3}s`;
+    container.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+  }, 400);
+}
+
+// 🐱 Klikání na kočku
 cat.addEventListener('click', () => {
   clickCount++;
 
@@ -104,7 +118,8 @@ cat.addEventListener('click', () => {
     setTimeout(() => {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
-      loadPayments(); // 💾 načtení přehledu až teď
+      loadPayments();
+      spawnBackgroundHearts();
       app.scrollIntoView({ behavior: 'smooth' });
     }, 1800);
   }
