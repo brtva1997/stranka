@@ -123,10 +123,6 @@ thead {
   text-shadow: 0 0 6px var(--cyan);
 }
 
-th:nth-child(2),
-td:nth-child(2) {
-  display: none;
-}
 
 th, td {
   padding: 0.6rem;
