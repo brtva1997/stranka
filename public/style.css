@@ -84,7 +84,7 @@ html, body {
   flex-grow: 1;
   overflow-y: auto;
   padding: 2rem 0 2rem;
-  margin-top: 110px; /* posun kvůli fixnímu #app-header */
+  margin-top: 84px; /* fixně pod hlavičku */
 }
 
 details {
