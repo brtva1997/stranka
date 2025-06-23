@@ -114,7 +114,7 @@ cat.addEventListener('click', () => {
     cat.style.display = 'none';
     heartMsg.style.display = 'flex'; // ne "block", protože používáme flex
     heartMsg.style.animation = 'inflateFade 1.8s ease-out';
-
+  
     setTimeout(() => {
       catContainer.classList.add('hidden');
       heartMsg.style.display = 'none';
