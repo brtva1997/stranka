@@ -7,10 +7,12 @@ const app = document.getElementById('app');
 const catContainer = document.getElementById('cat-container');
 // 💳 Načtení a zobrazení splátek
 function loadPayments() {
+  
   fetch('payments.json')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('monthly-sections');
+      let totalDebt = 3300;
       let paidTotal = 0;
       let unpaidTotal = 0;
 
@@ -27,11 +29,18 @@ function loadPayments() {
         <tbody>
           ${data.map(e => {
             const d = new Date(e.date).toLocaleDateString('cs-CZ');
-            const statusIcon = e.status === 'paid' ? '✅' :
-                               e.status === 'nearest' ? '⌛' : '❌';
-            const cls = e.status === 'paid' ? 'paid' :
-                        e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
-            if (e.status === 'paid') paidTotal += e.amount;
+            const statusIcon = e.status === 'paid' ? '✅'
+                   : e.status === 'nearest' ? '⌛'
+                   : '➖';
+
+const cls = e.status === 'paid' ? 'paid'
+           : e.status === 'nearest' ? 'nearest-highlight'
+           : 'unpaid';
+
+           if (e.status === 'paid') {
+            paidTotal += e.amount;
+            totalDebt -= e.amount;
+          }
             else unpaidTotal += e.amount;
 
             return `
@@ -48,11 +57,10 @@ function loadPayments() {
       container.innerHTML = ''; // vyčistíme kontejner
       container.appendChild(table);
 
-      document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
-        style: 'currency',
-        currency: 'GBP'
-      });
-
+      document.getElementById('unpaidAmount').textContent = totalDebt.toLocaleString('en-GB', {
+  style: 'currency',
+  currency: 'GBP'
+});
       document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', {
         style: 'currency',
         currency: 'GBP'

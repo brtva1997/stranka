@@ -159,9 +159,11 @@ tr.paid {
 }
 
 tr.unpaid {
-  background: rgba(255, 0, 70, 0.06);
-  border-left: 4px solid #ff4f99;
+  background: rgba(200, 200, 200, 0.05);
+  border-left: 4px solid #999;
+  color: #ccc;
 }
+
 
 tr.nearest-highlight {
   background: rgba(255, 255, 0, 0.06);
