@@ -11,53 +11,42 @@ function loadPayments() {
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('monthly-sections');
-      const months = {};
       let paidTotal = 0;
       let unpaidTotal = 0;
 
-      data.forEach(entry => {
-        const date = new Date(entry.date);
-        const monthKey = date.toISOString().slice(0, 7);
-        if (!months[monthKey]) months[monthKey] = [];
-        months[monthKey].push(entry);
-        if (entry.status === 'paid') paidTotal += entry.amount;
-        else unpaidTotal += entry.amount;
-      });
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Status</th>
+            <th>Popis</th>
+            <th>Částka</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(e => {
+            const d = new Date(e.date).toLocaleDateString('cs-CZ');
+            const statusIcon = e.status === 'paid' ? '✅' :
+                               e.status === 'nearest' ? '⌛' : '❌';
+            const cls = e.status === 'paid' ? 'paid' :
+                        e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
+            if (e.status === 'paid') paidTotal += e.amount;
+            else unpaidTotal += e.amount;
 
-      Object.entries(months).forEach(([monthKey, entries]) => {
-        const [y, m] = monthKey.split('-');
-        const title = new Date(`${y}-${m}-01`).toLocaleDateString('cs-CZ', {
-          month: 'long',
-          year: 'numeric'
-        });
+            return `
+              <tr class="${cls}">
+                <td>${d}</td>
+                <td>${statusIcon}</td>
+                <td>£80 nájem + £${e.amount} splátka</td>
+                <td>£${(80 + e.amount).toFixed(2)}</td>
+              </tr>`;
+          }).join('')}
+        </tbody>
+      `;
 
-        const section = document.createElement('details');
-        section.setAttribute('open', '');
-
-        section.innerHTML = `
-          <summary>${title}</summary>
-          <table>
-            <thead>
-              <tr><th>Datum</th><th>Status</th><th>Částka</th></tr>
-            </thead>
-            <tbody>
-              ${entries.map(e => {
-                const d = new Date(e.date).toLocaleDateString('cs-CZ');
-                const status = e.status === 'paid' ? '✅' :
-                               e.status === 'nearest' ? '⌛' : '';
-                const cls = e.status === 'paid' ? 'paid' :
-                            e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
-                return `
-                  <tr class="${cls}">
-                    <td>${d}</td>
-                    <td>${status}</td>
-                    <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
-                  </tr>`;
-              }).join('')}
-            </tbody>
-          </table>`;
-        container.appendChild(section);
-      });
+      container.innerHTML = ''; // vyčistíme kontejner
+      container.appendChild(table);
 
       document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
         style: 'currency',
@@ -70,6 +59,7 @@ function loadPayments() {
       });
     });
 }
+
 
 // 💖 Padající pozadí
 function spawnBackgroundHearts() {
