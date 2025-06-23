@@ -1,14 +1,14 @@
 :root {
   --bg: linear-gradient(160deg, #1a0028, #440057, #140018);
-  --panel: rgba(34, 0, 48, 0.8);
+  --panel: rgba(34, 0, 48, 0.85);
   --white: #ffffff;
   --pink: #ff78c4;
   --heart: #ff6ec7;
   --cyan: #66e0ff;
-  --unpaid: #ffb5b5;
+  --unpaid: #ff9c9c;
   --paid: #5cffad;
   --nearest: #ffee85;
-  --text: #e8e8ff;
+  --text: #f0f0f5;
   font-family: 'Orbitron', sans-serif;
 }
 
@@ -23,7 +23,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   overflow-x: hidden;
 }
 
@@ -37,12 +36,6 @@ body {
   text-align: center;
 }
 
-h2 {
-  text-align: center;
-  color: var(--cyan);
-  text-shadow: 0 0 10px rgba(102, 224, 255, 0.4);
-}
-
 #app {
   width: 92vw;
   max-width: 800px;
@@ -50,10 +43,15 @@ h2 {
   margin: 2rem auto;
   background: var(--panel);
   border-radius: 12px;
-  backdrop-filter: blur(18px);
-  box-shadow:
-    0 0 30px rgba(203, 128, 255, 0.2),
-    0 0 12px rgba(255, 112, 196, 0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(203, 128, 255, 0.2),
+              0 0 12px rgba(255, 112, 196, 0.08);
+}
+
+h2 {
+  text-align: center;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(102, 224, 255, 0.5);
 }
 
 #summary {
@@ -70,8 +68,8 @@ details {
   background: #2e1c3d;
   border-radius: 8px;
   margin-bottom: 1.2rem;
-  box-shadow: 0 0 14px rgba(255,255,255,0.05);
-  overflow: hidden;
+  box-shadow: 0 0 14px rgba(255,255,255,0.04);
+  overflow-x: auto;
 }
 
 summary {
@@ -85,7 +83,13 @@ summary {
   border-bottom: 1px solid #444;
 }
 
+.scroll-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
 table {
+  min-width: 600px;
   width: 100%;
   border-spacing: 0;
   border-radius: 10px;

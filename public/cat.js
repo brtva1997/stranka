@@ -23,12 +23,12 @@ cat.addEventListener('click', () => {
     floatHeart.style.fontSize = `${Math.random() * 1.4 + 0.6}rem`;
     floatHeart.style.opacity = '1';
     floatHeart.textContent = ['💖', '💜', '🩷', '💕'][clickCount % 4];
-    floatHeart.style.transition = 'opacity 0.6s ease 5.2s';
+    floatHeart.style.transition = 'opacity 0.6s ease';
     document.body.appendChild(floatHeart);
     setTimeout(() => {
       floatHeart.style.opacity = '0';
-      setTimeout(() => floatHeart.remove(), 800);
-    }, 5300);
+    }, 5000);
+    setTimeout(() => floatHeart.remove(), 5800);
   }
 
   if (clickCount === 10) {
@@ -73,27 +73,29 @@ fetch('payments.json')
       if (hasNearest) section.setAttribute('open', '');
       section.innerHTML = `
         <summary>${title}</summary>
-        <table>
-          <thead>
-            <tr><th>Datum</th><th>Popis</th><th>Status</th><th>Částka</th></tr>
-          </thead>
-          <tbody>
-            ${entries.map(e => {
-              const d = new Date(e.date).toLocaleDateString('cs-CZ');
-              const status = e.status === 'paid' ? '✅' :
-                             e.status === 'nearest' ? '⌛' : '';
-              const cls = e.status === 'paid' ? 'paid' :
-                          e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
-              return `
-                <tr class="${cls}" data-amount="${e.amount}">
-                  <td>${d}</td>
-                  <td>${e.label}</td>
-                  <td>${status}</td>
-                  <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
-                </tr>`;
-            }).join('')}
-          </tbody>
-        </table>`;
+        <div class="scroll-container">
+          <table>
+            <thead>
+              <tr><th>Datum</th><th>Popis</th><th>Status</th><th>Částka</th></tr>
+            </thead>
+            <tbody>
+              ${entries.map(e => {
+                const d = new Date(e.date).toLocaleDateString('cs-CZ');
+                const status = e.status === 'paid' ? '✅' :
+                               e.status === 'nearest' ? '⌛' : '';
+                const cls = e.status === 'paid' ? 'paid' :
+                            e.status === 'nearest' ? 'nearest-highlight' : 'unpaid';
+                return `
+                  <tr class="${cls}">
+                    <td>${d}</td>
+                    <td>${e.label}</td>
+                    <td>${status}</td>
+                    <td>£125<br /><small>(£80 nájem + £${e.amount} splátka)</small></td>
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>`;
       container.appendChild(section);
     });
 
