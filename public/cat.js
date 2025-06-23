@@ -5,20 +5,15 @@ const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
 
-// Kliknutí na kočku
 cat.addEventListener('click', () => {
   clickCount++;
-  console.log('Kliknutí:', clickCount);
-
   if (clickCount <= 10) {
-    // Přepnout obrázek
     cat.src = 'cat2.png';
     clearTimeout(revertTimeout);
     revertTimeout = setTimeout(() => {
       cat.src = 'cat.png';
     }, 600);
 
-    // Pozice kočky na stránce
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
@@ -26,17 +21,20 @@ cat.addEventListener('click', () => {
     floatHeart.style.left = `${rect.left + rect.width / 2 + (Math.random() * 60 - 30)}px`;
     floatHeart.style.top = `${rect.top + rect.height / 2 + (Math.random() * 40 - 20)}px`;
     floatHeart.style.fontSize = `${Math.random() * 1.4 + 0.6}rem`;
+    floatHeart.style.opacity = '1';
     floatHeart.textContent = ['💖', '💜', '🩷', '💕'][clickCount % 4];
+    floatHeart.style.transition = 'opacity 0.6s ease 5.2s';
     document.body.appendChild(floatHeart);
-    setTimeout(() => floatHeart.remove(), 6000);
+    setTimeout(() => {
+      floatHeart.style.opacity = '0';
+      setTimeout(() => floatHeart.remove(), 800);
+    }, 5300);
   }
 
   if (clickCount === 10) {
-    console.log('Zobrazuji app...');
     cat.style.display = 'none';
     heartMsg.style.display = 'block';
     heartMsg.style.animation = 'inflateFade 1.8s ease-out';
-
     setTimeout(() => {
       heartMsg.style.display = 'none';
       heartMsg.style.animation = '';
@@ -46,12 +44,8 @@ cat.addEventListener('click', () => {
   }
 });
 
-// Načtení dat ze splátkového JSONu
 fetch('payments.json')
-  .then(res => {
-    if (!res.ok) throw new Error('Chyba při načítání payments.json');
-    return res.json();
-  })
+  .then(res => res.json())
   .then(data => {
     const container = document.getElementById('monthly-sections');
     const months = {};
@@ -63,7 +57,6 @@ fetch('payments.json')
       const monthKey = date.toISOString().slice(0, 7);
       if (!months[monthKey]) months[monthKey] = [];
       months[monthKey].push(entry);
-
       if (entry.status === 'paid') paidTotal += entry.amount;
       else unpaidTotal += entry.amount;
     });
@@ -75,7 +68,9 @@ fetch('payments.json')
         year: 'numeric'
       });
 
+      const hasNearest = entries.some(e => e.status === 'nearest');
       const section = document.createElement('details');
+      if (hasNearest) section.setAttribute('open', '');
       section.innerHTML = `
         <summary>${title}</summary>
         <table>
@@ -106,10 +101,8 @@ fetch('payments.json')
       style: 'currency',
       currency: 'GBP'
     });
-
     document.getElementById('unpaidAmount').textContent = unpaidTotal.toLocaleString('en-GB', {
       style: 'currency',
       currency: 'GBP'
     });
-  })
-  .catch(err => console.error('❌ Nepodařilo se načíst payments.json:', err));
+  });
