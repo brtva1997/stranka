@@ -12,11 +12,12 @@
   font-family: 'Orbitron', sans-serif;
 }
 
-body {
-  background: var(--bg);
-  color: var(--text);
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
   font-size: 15px;
   overflow-x: hidden;
   display: flex;
@@ -24,13 +25,23 @@ body {
   align-items: center;
 }
 
+#cat-container {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
 #app {
   width: 92vw;
   max-width: 800px;
-  margin: 0 auto;
   background: var(--panel);
   border-radius: 12px;
   box-shadow: 0 0 30px rgba(203, 128, 255, 0.2);
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 #app-header {
@@ -65,6 +76,15 @@ details {
   border-radius: 8px;
   margin: 1rem 0;
   box-shadow: 0 0 14px rgba(255,255,255,0.04);
+
+  /* zamezení změny výšky */
+  max-height: 200px;
+  overflow: hidden;
+  transition: none;
+}
+
+details[open] {
+  max-height: 200px;
 }
 
 summary {
@@ -75,7 +95,8 @@ summary {
   font-size: 1rem;
   text-shadow: 0 0 4px var(--pink);
   border-bottom: 1px solid #444;
-  cursor: pointer;
+  cursor: default;
+  user-select: none;
 }
 
 table {
@@ -95,7 +116,7 @@ thead {
 
 th:nth-child(2),
 td:nth-child(2) {
-  display: none; /* Skryjeme sloupec 'Popis' */
+  display: none;
 }
 
 th, td {

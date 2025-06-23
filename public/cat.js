@@ -5,7 +5,7 @@ const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
 
-// 💳 Načtení přehledu (spustit až po 10. kliknutí)
+// 🧩 Funkce pro načtení splátek (volá se až po 10. kliknutí)
 function loadPayments() {
   fetch('payments.json')
     .then(res => res.json())
@@ -31,9 +31,8 @@ function loadPayments() {
           year: 'numeric'
         });
 
-        const hasNearest = entries.some(e => e.status === 'nearest');
         const section = document.createElement('details');
-        if (hasNearest) section.setAttribute('open', '');
+        section.setAttribute('open', ''); // vždy otevřené – výška se nemění
 
         section.innerHTML = `
           <summary>${title}</summary>
@@ -72,7 +71,7 @@ function loadPayments() {
     });
 }
 
-// 🐾 Kliknutí na kočku a efekty
+// 🐱 Klikání na kočku a efekty
 cat.addEventListener('click', () => {
   clickCount++;
 
@@ -105,7 +104,7 @@ cat.addEventListener('click', () => {
     setTimeout(() => {
       heartMsg.style.display = 'none';
       app.classList.remove('hidden');
-      loadPayments(); // ✅ načti splátky až teď
+      loadPayments(); // 💾 načtení přehledu až teď
       app.scrollIntoView({ behavior: 'smooth' });
     }, 1800);
   }
