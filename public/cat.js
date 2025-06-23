@@ -112,7 +112,7 @@ cat.addEventListener('click', () => {
 
   if (clickCount === 10) {
     cat.style.display = 'none';
-    heartMsg.style.display = 'block';
+    heartMsg.style.display = 'flex'; // ne "block", protože používáme flex
     heartMsg.style.animation = 'inflateFade 1.8s ease-out';
 
     setTimeout(() => {
