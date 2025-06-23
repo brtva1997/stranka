@@ -1,99 +1,104 @@
 :root {
-  --glass: rgba(255, 255, 255, 0.05);
-  --cyan: #72c5ff;
-  --pink: #ff70c4;
-  --nearest-glow: #ffffff;
-  --text: #f4eaff;
-  --heart: #ffee99;
+  --bg: #1a1d22;
+  --panel: #292c35dd;
+  --white: #ffffff;
+  --pink: #ff78c4;
+  --heart: #ff6ec7;
+  --cyan: #66e0ff;
+  --unpaid: #ffb5b5;
+  --paid: #5cffad;
+  --nearest: #ffee85;
+  --text: #f0f0f0;
+  font-family: 'Orbitron', sans-serif;
 }
 
 body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(to bottom, #1a001f, #0b0016);
+  background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
-  padding: 2rem;
-  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
-.hidden {
-  display: none;
+h2 {
+  text-align: center;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(102, 224, 255, 0.4);
 }
 
 #app {
-  position: relative;
-  max-width: 960px;
-  margin: 5rem auto;
-  background: var(--glass);
-  backdrop-filter: blur(16px);
+  max-width: 800px;
+  margin: 2rem auto;
   padding: 2rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--panel);
+  border-radius: 12px;
+  backdrop-filter: blur(18px);
   box-shadow:
     0 0 30px rgba(203, 128, 255, 0.2),
     0 0 12px rgba(255, 112, 196, 0.08);
 }
 
-h2 {
-  color: var(--cyan);
-  text-shadow: 0 0 10px rgba(102, 224, 255, 0.4);
-  margin-bottom: 2rem;
-}
-
 #summary {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+  font-size: 1.2rem;
+  text-shadow: 0 0 5px var(--cyan);
 }
 
-#summary strong {
-  color: var(--pink);
-}
-
-/* Měsíční bloky */
 details {
-  text-align: left;
-  margin: 1.2rem auto;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 1rem;
+  background: #2e323e;
   border-radius: 8px;
-  max-width: 800px;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 14px rgba(255,255,255,0.08);
+  overflow: hidden;
 }
 
 summary {
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: var(--cyan);
   cursor: pointer;
-  margin-bottom: 0.5rem;
+  padding: 10px 16px;
+  background: #3c3f4d;
+  color: var(--white);
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-/* Tabulky */
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
-  word-break: break-word;
-  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
 }
 
 th, td {
-  padding: 0.8rem;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.6rem;
+  text-align: left;
 }
 
-td small {
-  opacity: 0.7;
-  font-size: 0.8rem;
+thead {
+  background-color: #444;
+  color: var(--cyan);
+  text-shadow: 0 0 5px var(--cyan);
 }
 
-/* Zvýrazněná splátka */
-.nearest-highlight {
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 5px solid var(--heart);
-  transition: background 0.3s ease;
+tr.paid {
+  background: rgba(40, 160, 90, 0.15);
+  color: var(--paid);
+}
+
+tr.unpaid {
+  background: rgba(255, 80, 80, 0.15);
+  color: var(--unpaid);
+}
+
+tr.nearest-highlight {
+  background: rgba(255, 255, 100, 0.15);
+  color: var(--nearest);
+  font-weight: bold;
+  text-shadow: 0 0 6px var(--nearest);
+}
+
+.hidden {
+  display: none;
 }

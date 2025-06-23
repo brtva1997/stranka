@@ -1,131 +1,50 @@
-:root {
-  --bg: #0b0016;
-  --bg-alt: #1a001f;
-  --pink: #ff70c4;
-  --heart: #ffee99;
-  --text: #f4eaff;
-}
-
-/* Základní pozadí a tělo */
-body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(to bottom, var(--bg-alt), var(--bg));
-  color: var(--text);
-  overflow: hidden;
-  min-height: 100vh;
-  padding: 2rem;
-  position: relative;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Kontejner s kočkou */
 #cat-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
+  position: relative;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 #cat {
-  width: 240px;
+  width: 180px;
+  height: auto;
   cursor: pointer;
-  filter: drop-shadow(0 0 12px var(--pink));
   transition: transform 0.2s ease;
-  touch-action: manipulation;
-  position: relative;
 }
 
-#cat:hover {
-  transform: scale(1.05);
+#cat:active {
+  transform: scale(1.04);
 }
 
-/* Vyplazený jazyk */
-#cat.tongue::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 14px;
-  background: radial-gradient(circle at 50% 20%, #ff6aa6, #d92e6a);
-  border-radius: 50% 50% 40% 40%;
-  animation: tongueWiggle 0.6s ease-out;
-  z-index: 1;
-}
-
-@keyframes tongueWiggle {
-  0%   { transform: translateX(-50%) scaleY(0.2); opacity: 0; }
-  40%  { transform: translateX(-50%) scaleY(1); opacity: 1; }
-  100% { transform: translateX(-50%) scaleY(0.2); opacity: 0; }
-}
-
-/* Velké srdce uprostřed */
+/* Velké srdce ve středu obrazovky */
 #heart-msg {
   display: none;
   position: fixed;
   inset: 0;
   margin: auto;
-  width: max-content;
-  height: max-content;
   font-size: 30vw;
-  line-height: 1;
   color: var(--heart);
   text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
   pointer-events: none;
   z-index: 9999;
 }
 
-/* Nafouknutí a zmizení */
 @keyframes inflateFade {
   0%   { transform: scale(0); opacity: 0; }
   60%  { transform: scale(1.5); opacity: 1; }
   100% { transform: scale(2); opacity: 0; filter: blur(6px); }
 }
 
-/* Plovoucí srdíčka */
+/* Létající malá srdíčka */
 .heart {
   position: absolute;
   top: -20px;
-  animation: floatHeart 8s linear forwards;
-  color: var(--pink);
+  animation: floatHeart 6s linear forwards;
   opacity: 0.8;
   pointer-events: none;
-  font-size: 1.2rem;
+  z-index: 1000;
 }
 
 @keyframes floatHeart {
   0%   { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
-}
-
-/* Text "Meow!" při kliku */
-.meow-pop {
-  position: absolute;
-  color: var(--pink);
-  font-size: 1.5rem;
-  animation: fadePop 0.8s ease-out forwards;
-  pointer-events: none;
-  text-shadow: 0 0 8px #fff;
-  z-index: 9999;
-}
-
-@keyframes fadePop {
-  0%   { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
-}
-
-/* Zvýraznění nejbližší splátky */
-.nearest-highlight {
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 5px solid var(--heart);
-  transition: background 0.3s ease;
+  100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
 }
