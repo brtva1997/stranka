@@ -32,7 +32,7 @@
   position: fixed;
   animation: floatHeart 6s linear forwards;
   opacity: 0.8;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 1000;
   text-shadow: 0 0 6px var(--heart);
   transition: opacity 0.6s ease;
