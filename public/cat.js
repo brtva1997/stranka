@@ -8,6 +8,7 @@ const app = document.getElementById('app');
 cat.addEventListener('click', () => {
   clickCount++;
 
+  // 💖 Mini srdíčko z kočky
   if (clickCount <= 10) {
     cat.src = 'cat2.png';
     clearTimeout(revertTimeout);
@@ -29,6 +30,7 @@ cat.addEventListener('click', () => {
     setTimeout(() => floatHeart.remove(), 500);
   }
 
+  // 💗 Po 10. kliknutí – velké srdce a zobrazení aplikace
   if (clickCount === 10) {
     cat.style.display = 'none';
     heartMsg.style.display = 'block';
@@ -42,6 +44,7 @@ cat.addEventListener('click', () => {
   }
 });
 
+// 📊 Načtení splátek a vykreslení tabulek
 fetch('payments.json')
   .then(res => res.json())
   .then(data => {
@@ -50,15 +53,18 @@ fetch('payments.json')
     let paidTotal = 0;
     let unpaidTotal = 0;
 
+    // seskupení podle měsíce
     data.forEach(entry => {
       const date = new Date(entry.date);
       const monthKey = date.toISOString().slice(0, 7);
       if (!months[monthKey]) months[monthKey] = [];
       months[monthKey].push(entry);
+
       if (entry.status === 'paid') paidTotal += entry.amount;
       else unpaidTotal += entry.amount;
     });
 
+    // vykreslení sekcí po měsících
     Object.entries(months).forEach(([monthKey, entries]) => {
       const [y, m] = monthKey.split('-');
       const title = new Date(`${y}-${m}-01`).toLocaleDateString('cs-CZ', {
@@ -69,6 +75,7 @@ fetch('payments.json')
       const hasNearest = entries.some(e => e.status === 'nearest');
       const section = document.createElement('details');
       if (hasNearest) section.setAttribute('open', '');
+
       section.innerHTML = `
         <summary>${title}</summary>
         <table>
@@ -94,6 +101,7 @@ fetch('payments.json')
       container.appendChild(section);
     });
 
+    // zobrazit souhrny
     document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
       style: 'currency',
       currency: 'GBP'
