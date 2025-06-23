@@ -1,11 +1,11 @@
 #cat-container {
   position: relative;
   text-align: center;
-  margin-top: 2rem;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
 }
 
 #cat {
@@ -20,7 +20,6 @@
   transform: scale(1.04);
 }
 
-/* Velké srdce uprostřed obrazovky */
 #heart-msg {
   display: none;
   position: fixed;
@@ -28,9 +27,7 @@
   margin: auto;
   font-size: 30vw;
   color: var(--heart);
-  text-shadow:
-    0 0 36px var(--heart),
-    0 0 60px #ffdd55;
+  text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
   pointer-events: none;
   z-index: 9999;
 }
@@ -41,10 +38,8 @@
   100% { transform: scale(2); opacity: 0; filter: blur(6px); }
 }
 
-/* Létající srdíčka */
 .heart {
-  position: absolute;
-  top: -20px;
+  position: fixed;
   animation: floatHeart 6s linear forwards;
   opacity: 0.8;
   pointer-events: none;
