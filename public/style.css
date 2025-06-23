@@ -13,13 +13,19 @@
 }
 
 body {
-  background: var(--bg);
+  background: linear-gradient(160deg, #1a1d27, #2c2f48 60%, #0f0f1c);
   color: var(--text);
   margin: 0;
   padding: 0;
   font-size: 15px;
   line-height: 1.4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
+
 
 h2 {
   text-align: center;
@@ -65,15 +71,15 @@ summary {
 }
 
 table {
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
 }
 
-th, td {
-  padding: 0.6rem;
-  text-align: left;
+td, th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 thead {

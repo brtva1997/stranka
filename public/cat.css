@@ -1,8 +1,8 @@
 #cat-container {
-  position: relative;
-  text-align: center;
   margin-top: 2rem;
+  text-align: center;
 }
+
 
 #cat {
   width: 180px;
