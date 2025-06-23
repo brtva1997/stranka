@@ -13,9 +13,8 @@
 #heart-msg {
   display: none;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  margin: auto;
   font-size: 30vw;
   color: var(--heart);
   text-shadow: 0 0 36px var(--heart), 0 0 60px #ffdd55;
