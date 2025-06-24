@@ -1,11 +1,25 @@
 let clickCount = 0;
-let revertTimeout;
+let isCat2 = false;
 
 const cat = document.getElementById('cat');
 const heartMsg = document.getElementById('heart-msg');
 const app = document.getElementById('app');
 const catContainer = document.getElementById('cat-container');
-// 💳 Načtení a zobrazení splátek
+
+// Předehrání obrázků, aby se okamžitě načetly z cache
+const preloadImages = ['cat.png', 'cat2.png'].map(src => {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = resolve;
+    img.src = src;
+  });
+});
+
+Promise.all(preloadImages).then(() => {
+  cat.style.display = 'block';
+});
+
+// 💳 Načtení splátek a vykreslení tabulky
 function loadPayments() {
   fetch('payments.json')
     .then(res => res.json())
@@ -47,7 +61,7 @@ function loadPayments() {
                 <td>${statusIcon}</td>
                 <td>£80 nájem + £${e.amount} splátka</td>
               </tr>
-                  `;
+            `;
           }).join('')}
         </tbody>
       `;
@@ -67,9 +81,7 @@ function loadPayments() {
     });
 }
 
-
-
-// 💖 Padající pozadí
+// 💖 Padající srdíčka v pozadí
 function spawnBackgroundHearts() {
   const container = document.getElementById('background-hearts');
   setInterval(() => {
@@ -84,30 +96,13 @@ function spawnBackgroundHearts() {
 }
 
 // 🐾 Klikání na kočku
-// Počkáme na načtení všech klíčových obrázků
-const preloadImages = ['cat.png', 'cat2.png'].map(src => {
-  return new Promise(resolve => {
-    const img = new Image();
-    img.onload = resolve;
-    img.src = src;
-  });
-});
-
-Promise.all(preloadImages).then(() => {
-  cat.style.display = 'block'; // nebo 'inline-block' dle layoutu
-});
-let clickCount = 0;
-let isCat2 = false;
-
 cat.addEventListener('click', () => {
   clickCount++;
 
   if (clickCount < 10) {
-    // 🔁 Přepínání obrázku kočky
     isCat2 = !isCat2;
     cat.src = isCat2 ? 'cat2.png' : 'cat.png';
 
-    // 💖 Vystřelující mini srdíčko
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
@@ -121,13 +116,12 @@ cat.addEventListener('click', () => {
     floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
 
     document.body.appendChild(floatHeart);
-    setTimeout(() => floatHeart.remove(), 800); // animace fadeout probíhá v CSS
+    setTimeout(() => floatHeart.remove(), 800);
   }
 
   if (clickCount === 10) {
     cat.style.display = 'none';
 
-    // 💖 Velké růžové srdce
     heartMsg.textContent = '💖';
     heartMsg.style.color = '#ff78c4';
     heartMsg.style.textShadow = 'none';
