@@ -115,7 +115,7 @@ cat.addEventListener('click', () => {
     floatHeart.style.left = `${rect.left + rect.width / 2 + xOffset}px`;
     floatHeart.style.top = `${rect.top + rect.height / 2 + yOffset}px`;
     floatHeart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
-    floatHeart.textContent = ['💜', '🩷'][Math.floor(Math.random() * 4)];
+    floatHeart.textContent = ['💜', '🩷'][Math.floor(Math.random() * 2)];
 
     document.body.appendChild(floatHeart);
     setTimeout(() => floatHeart.remove(), 800); // Necháme fadeout animaci doběhnout
