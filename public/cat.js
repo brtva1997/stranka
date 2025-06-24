@@ -87,42 +87,42 @@ function spawnBackgroundHearts() {
 cat.addEventListener('click', () => {
   clickCount++;
 
-  if (clickCount <= 10) {
-    cat.src = 'cat2.png';
-    clearTimeout(revertTimeout);
-    revertTimeout = setTimeout(() => {
-      cat.src = 'cat.png';
-    }, 600);
+  if (clickCount < 10) {
+    // střídání obrázku
+    cat.src = (clickCount % 2 === 0) ? 'cat.png' : 'cat2.png';
 
+    // 💖 mini srdíčko jako předtím
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
     floatHeart.style.left = `${rect.left + rect.width / 2}px`;
     floatHeart.style.top = `${rect.top + rect.height / 2}px`;
     floatHeart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
-    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
-    floatHeart.style.transition = 'opacity 0.4s ease';
+    floatHeart.textContent = ['🩷'][Math.floor(Math.random() * 4)];
     document.body.appendChild(floatHeart);
 
     setTimeout(() => floatHeart.style.opacity = '0', 100);
     setTimeout(() => floatHeart.remove(), 500);
   }
 
-  if (clickCount === 10) {
-  cat.style.display = 'none';
-  heartMsg.style.display = 'flex';
-  heartMsg.style.animation = 'none';
-  void heartMsg.offsetWidth;
-  heartMsg.style.animation = 'inflateFade 1.8s ease-out';
+   if (clickCount < 10) {
+    cat.src = (clickCount % 2 === 0) ? 'cat.png' : 'cat2.png';
 
-  setTimeout(() => {
-    catContainer.classList.add('hidden');
-    heartMsg.style.display = 'none';
-    app.classList.remove('hidden');
-    loadPayments();
-    spawnBackgroundHearts();
-    app.scrollIntoView({ behavior: 'smooth' });
-  }, 1800);
-}
+    // 💖 Plovoucí srdíčko
+    const rect = cat.getBoundingClientRect();
+    const floatHeart = document.createElement('div');
+    floatHeart.className = 'heart';
 
+    const xOffset = (Math.random() - 0.5) * 120;
+    const yOffset = (Math.random() - 1) * 80;
+
+    floatHeart.style.left = `${rect.left + rect.width / 2 + xOffset}px`;
+    floatHeart.style.top = `${rect.top + rect.height / 2 + yOffset}px`;
+    floatHeart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
+    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
+
+    document.body.appendChild(floatHeart);
+    setTimeout(() => floatHeart.remove(), 800); // Necháme fadeout animaci doběhnout
+  }
 });
+);
