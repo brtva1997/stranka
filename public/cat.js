@@ -26,7 +26,7 @@ function loadPayments() {
     .then(data => {
       const container = document.getElementById('monthly-sections');
       let totalDebt = 3300;
-      let paidTotal = 0;
+      let paidTotal = 740;
 
       const table = document.createElement('table');
       table.innerHTML = `
@@ -78,6 +78,13 @@ function loadPayments() {
         style: 'currency',
         currency: 'GBP'
       });
+      // Zbylé splátky
+const unpaidCount = data.filter(e => e.status !== 'paid').length;
+const message = document.createElement('p');
+message.textContent = `Zbývající počet splátek: ${unpaidCount} × £45`; // nebo e.amount, pokud se mění
+message.className = 'installments-info';
+container.appendChild(message);
+
     });
 }
 

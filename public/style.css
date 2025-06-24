@@ -24,6 +24,13 @@ html, body {
   font-size: 15px;
   overflow-x: hidden;
 }
+.installments-info {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--cyan);
+  text-align: right;
+  font-weight: 500;
+}
 
 .hidden {
   display: none !important;
