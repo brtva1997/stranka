@@ -96,17 +96,18 @@ const preloadImages = ['cat.png', 'cat2.png'].map(src => {
 Promise.all(preloadImages).then(() => {
   cat.style.display = 'block'; // nebo 'inline-block' dle layoutu
 });
+let clickCount = 0;
+let isCat2 = false;
 
-
-  cat.addEventListener('click', () => {
+cat.addEventListener('click', () => {
   clickCount++;
 
   if (clickCount < 10) {
-    // 🔁 Přepnutí obrázku
+    // 🔁 Přepínání obrázku kočky
     isCat2 = !isCat2;
     cat.src = isCat2 ? 'cat2.png' : 'cat.png';
 
-    // 💖 Vystřelující srdíčko
+    // 💖 Vystřelující mini srdíčko
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
@@ -120,11 +121,13 @@ Promise.all(preloadImages).then(() => {
     floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
 
     document.body.appendChild(floatHeart);
-    setTimeout(() => floatHeart.remove(), 800);
+    setTimeout(() => floatHeart.remove(), 800); // animace fadeout probíhá v CSS
   }
 
   if (clickCount === 10) {
     cat.style.display = 'none';
+
+    // 💖 Velké růžové srdce
     heartMsg.textContent = '💖';
     heartMsg.style.color = '#ff78c4';
     heartMsg.style.textShadow = 'none';
