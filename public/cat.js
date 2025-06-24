@@ -123,6 +123,9 @@ cat.addEventListener('click', () => {
 
   // 10. kliknutí: 💥 Odemknutí aplikace
   if (clickCount === 10) {
+    heartMsg.textContent = '❤️';
+    heartMsg.style.color = '#ff2b2b';
+    heartMsg.style.textShadow = 'none';
     cat.style.display = 'none';
     heartMsg.style.display = 'flex';
     heartMsg.style.animation = 'none';
