@@ -79,9 +79,11 @@ function loadPayments() {
         currency: 'GBP'
       });
       // Zbylé splátky
-const unpaidCount = data.filter(e => e.status !== 'paid').length;
+const weeklyInstallment = 45; // jednotná týdenní částka
+const estimatedInstallments = Math.ceil(totalDebt / weeklyInstallment);
+
 const message = document.createElement('p');
-message.textContent = `Zbývající počet splátek: ${unpaidCount} × £45`; // nebo e.amount, pokud se mění
+message.textContent = `Zbývající počet splátek: ${estimatedInstallments} × £${weeklyInstallment}`;
 message.className = 'installments-info';
 container.appendChild(message);
 
