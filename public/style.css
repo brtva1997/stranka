@@ -113,7 +113,7 @@ table {
 
 thead {
   background: #2a2540;
-  color: var(--cyan);
+  color: #00ffd5;
   text-shadow: 0 0 6px var(--cyan);
 }
 
