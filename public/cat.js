@@ -28,7 +28,7 @@ function loadPayments() {
       container.innerHTML = '';
 
       let paidTotal = 740;
-      let totalDebt = 3300 - paidTotal;
+      let totalDebt = 4100 - paidTotal;
       const today = new Date();
       let nearestMarked = false;
 
