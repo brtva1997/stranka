@@ -19,14 +19,18 @@ Promise.all(preloadImages).then(() => {
   cat.style.display = 'block';
 });
 
-// 💳 Načtení splátek a vykreslení tabulky
+// 📊 Načtení a zobrazení splátek
 function loadPayments() {
   fetch('payments.json')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('monthly-sections');
-      let totalDebt = 3300;
+      container.innerHTML = '';
+
       let paidTotal = 740;
+      let totalDebt = 3300 - paidTotal;
+      const today = new Date();
+      let nearestMarked = false;
 
       const table = document.createElement('table');
       table.innerHTML = `
@@ -39,43 +43,43 @@ function loadPayments() {
         </thead>
         <tbody>
           ${data.map(e => {
-            let nearestMarked = false;
-const today = new Date();
+            const d = new Date(e.date);
+            const displayDate = d.toLocaleDateString('cs-CZ');
+            const isPaid = e.status === 'paid';
+            let statusIcon, rowClass;
 
-const rows = data.map(e => {
-  const paymentDate = new Date(e.date);
-  const d = paymentDate.toLocaleDateString('cs-CZ');
-  const isPaid = e.status === 'paid';
-  let statusIcon, rowClass;
-
-              if (isPaid) {
-    paidTotal += e.amount;
-    totalDebt -= e.amount;
-    statusIcon = '✅';
-    rowClass = 'paid';
-  } else if (!nearestMarked && paymentDate >= today) {
-    // první neplacená budoucí = nearest
-    statusIcon = '⌛';
-    rowClass = 'nearest-highlight';
-    nearestMarked = true;
-  } else {
-    statusIcon = '➖';
-    rowClass = 'unpaid';
-  }
+            if (isPaid) {
+              paidTotal += e.amount;
+              totalDebt -= e.amount;
+              statusIcon = '✅';
+              rowClass = 'paid';
+            } else if (!nearestMarked && d >= today) {
+              nearestMarked = true;
+              statusIcon = '⌛';
+              rowClass = 'nearest-highlight';
+            } else {
+              statusIcon = '➖';
+              rowClass = 'unpaid';
+            }
 
             return `
-    <tr class="${rowClass}">
-      <td>${d}</td>
-      <td>${statusIcon}</td>
-      <td>£80 nájem + £${e.amount} splátka</td>
-    </tr>
-  `;
-}).join('');}
+              <tr class="${rowClass}">
+                <td>${displayDate}</td>
+                <td>${statusIcon}</td>
+                <td>£80 nájem + £${e.amount} splátka</td>
+              </tr>
+            `;
+          }).join('')}
         </tbody>
       `;
-
-      container.innerHTML = '';
       container.appendChild(table);
+
+      const weeklyInstallment = 45;
+      const estimatedInstallments = Math.ceil(totalDebt / weeklyInstallment);
+      const message = document.createElement('p');
+      message.textContent = `Zbývající počet splátek: ${estimatedInstallments} × £${weeklyInstallment}`;
+      message.className = 'installments-info';
+      container.appendChild(message);
 
       document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
         style: 'currency',
@@ -86,18 +90,8 @@ const rows = data.map(e => {
         style: 'currency',
         currency: 'GBP'
       });
-      // Zbylé splátky
-const weeklyInstallment = 45; // jednotná týdenní částka
-const estimatedInstallments = Math.ceil(totalDebt / weeklyInstallment);
-
-const message = document.createElement('p');
-message.textContent = `Zbývající počet splátek: ${estimatedInstallments} × £${weeklyInstallment}`;
-message.className = 'installments-info';
-container.appendChild(message);
-
     });
 }
-
 // 💖 Padající srdíčka v pozadí
 function spawnBackgroundHearts() {
   const container = document.getElementById('background-hearts');
