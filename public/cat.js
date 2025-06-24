@@ -98,13 +98,15 @@ Promise.all(preloadImages).then(() => {
 });
 
 cat.addEventListener('click', () => {
+  cat.addEventListener('click', () => {
   clickCount++;
 
-  // Střídání obrázku při každém kliknutí
   if (clickCount < 10) {
-    cat.src = (clickCount % 2 === 0) ? 'cat.png' : 'cat2.png';
+    // 🔁 Přepnutí obrázku
+    isCat2 = !isCat2;
+    cat.src = isCat2 ? 'cat2.png' : 'cat.png';
 
-    // 💖 Plovoucí srdíčko
+    // 💖 Vystřelující srdíčko
     const rect = cat.getBoundingClientRect();
     const floatHeart = document.createElement('div');
     floatHeart.className = 'heart';
@@ -115,18 +117,17 @@ cat.addEventListener('click', () => {
     floatHeart.style.left = `${rect.left + rect.width / 2 + xOffset}px`;
     floatHeart.style.top = `${rect.top + rect.height / 2 + yOffset}px`;
     floatHeart.style.fontSize = `${Math.random() * 1.2 + 0.8}rem`;
-    floatHeart.textContent = ['💜', '🩷'][Math.floor(Math.random() * 2)];
+    floatHeart.textContent = ['💖', '💜', '🩷', '💕'][Math.floor(Math.random() * 4)];
 
     document.body.appendChild(floatHeart);
-    setTimeout(() => floatHeart.remove(), 800); // Necháme fadeout animaci doběhnout
+    setTimeout(() => floatHeart.remove(), 800);
   }
 
-  // 10. kliknutí: 💥 Odemknutí aplikace
   if (clickCount === 10) {
-    heartMsg.textContent = '❤️';
-    heartMsg.style.color = '#ff2b2b';
-    heartMsg.style.textShadow = 'none';
     cat.style.display = 'none';
+    heartMsg.textContent = '💖';
+    heartMsg.style.color = '#ff78c4';
+    heartMsg.style.textShadow = 'none';
     heartMsg.style.display = 'flex';
     heartMsg.style.animation = 'none';
     void heartMsg.offsetWidth;
