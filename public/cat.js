@@ -20,7 +20,6 @@ function loadPayments() {
           <tr>
             <th>Datum</th>
             <th>Status</th>
-            <th>Popis</th>
             <th>Částka</th>
           </tr>
         </thead>
