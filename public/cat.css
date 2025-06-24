@@ -22,6 +22,7 @@
   pointer-events: none;
   z-index: 9999;
   animation-fill-mode: forwards;
+  heartMsg.style.color = '#ff2b2b'
 }
 
 
