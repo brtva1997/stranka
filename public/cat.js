@@ -97,7 +97,7 @@ Promise.all(preloadImages).then(() => {
   cat.style.display = 'block'; // nebo 'inline-block' dle layoutu
 });
 
-cat.addEventListener('click', () => {
+
   cat.addEventListener('click', () => {
   clickCount++;
 
