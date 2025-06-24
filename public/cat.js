@@ -44,11 +44,11 @@ function loadPayments() {
 
             return `
               <tr class="${rowClass}">
-                <td data-label="Datum">${d}</td>
-                <td data-label="Status">${statusIcon}</td>
-                <td data-label="Popis">£80 nájem + £${e.amount} splátka</td>
-                <td data-label="Částka">£${(80 + e.amount).toFixed(2)}</td>
-              </tr>`;
+                <td>${d}</td>
+                <td>${statusIcon}</td>
+                <td>£80 nájem + £${e.amount} splátka</td>
+              </tr>
+                  `;
           }).join('')}
         </tbody>
       `;
