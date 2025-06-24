@@ -109,17 +109,20 @@ cat.addEventListener('click', () => {
   }
 
   if (clickCount === 10) {
-    cat.style.display = 'none';
-    heartMsg.style.display = 'flex'; // ne "block", protože používáme flex
-    heartMsg.style.animation = 'inflateFade 1.8s ease-out';
-  
-    setTimeout(() => {
-      catContainer.classList.add('hidden');
-      heartMsg.style.display = 'none';
-      app.classList.remove('hidden');
-      loadPayments();
-      spawnBackgroundHearts();
-      app.scrollIntoView({ behavior: 'smooth' });
-    }, 1800);
-  }
+  cat.style.display = 'none';
+  heartMsg.style.display = 'flex';
+  heartMsg.style.animation = 'none';
+  void heartMsg.offsetWidth;
+  heartMsg.style.animation = 'inflateFade 1.8s ease-out';
+
+  setTimeout(() => {
+    catContainer.classList.add('hidden');
+    heartMsg.style.display = 'none';
+    app.classList.remove('hidden');
+    loadPayments();
+    spawnBackgroundHearts();
+    app.scrollIntoView({ behavior: 'smooth' });
+  }, 1800);
+}
+
 });
