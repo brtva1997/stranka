@@ -186,6 +186,20 @@ tr.nearest-highlight {
   opacity: 1;
   pointer-events: none;
   z-index: 1000;
-  text-shadow: 0 0 4px var(--heart);
-  transition: opacity 0.4s ease;
+  animation: heartFloat 0.8s ease-out forwards;
 }
+
+@keyframes heartFloat {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) translate(-10px, -30px) rotate(15deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translate(40px, -80px) rotate(-25deg);
+  }
+}
+
