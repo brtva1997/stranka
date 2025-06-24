@@ -84,6 +84,19 @@ function spawnBackgroundHearts() {
 }
 
 // 🐾 Klikání na kočku
+// Počkáme na načtení všech klíčových obrázků
+const preloadImages = ['cat.png', 'cat2.png'].map(src => {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = resolve;
+    img.src = src;
+  });
+});
+
+Promise.all(preloadImages).then(() => {
+  cat.style.display = 'block'; // nebo 'inline-block' dle layoutu
+});
+
 cat.addEventListener('click', () => {
   clickCount++;
 

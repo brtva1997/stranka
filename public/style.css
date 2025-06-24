@@ -28,7 +28,9 @@ html, body {
 .hidden {
   display: none !important;
 }
-
+#cat {
+  display: none;
+}
 #cat-container {
   min-height: 100vh;
   display: flex;
