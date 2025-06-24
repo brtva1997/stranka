@@ -11,7 +11,7 @@
 }
 
 #heart-msg {
-  display: none !important;
+  display: none;
   position: fixed;
   inset: 0;
   display: flex;
