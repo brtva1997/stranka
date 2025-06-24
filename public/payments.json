@@ -2,7 +2,7 @@
   { "date": "2025-06-05", "status": "paid", "amount": 45 },
   { "date": "2025-06-12", "status": "paid", "amount": 45 },
   { "date": "2025-06-19", "status": "paid", "amount": 45 },
-  { "date": "2025-06-26", "status": "nearest", "amount": 45 },
+  { "date": "2025-06-26", "status": "paid", "amount": 45 },
   { "date": "2025-07-03", "status": "paid", "amount": 45 },
   { "date": "2025-07-10", "status": "unpaid", "amount": 45 },
   { "date": "2025-07-17", "status": "unpaid", "amount": 45 },
