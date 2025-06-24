@@ -39,30 +39,38 @@ function loadPayments() {
         </thead>
         <tbody>
           ${data.map(e => {
-            const d = new Date(e.date).toLocaleDateString('cs-CZ');
-            const isPaid = e.status === 'paid';
-            const isNearest = e.status === 'nearest';
+            let nearestMarked = false;
+const today = new Date();
 
-            if (isPaid) {
-              paidTotal += e.amount;
-              totalDebt -= e.amount;
-            }
+const rows = data.map(e => {
+  const paymentDate = new Date(e.date);
+  const d = paymentDate.toLocaleDateString('cs-CZ');
+  const isPaid = e.status === 'paid';
+  let statusIcon, rowClass;
 
-            const statusIcon = isPaid ? '✅' : isNearest ? '⌛' : '➖';
-            const rowClass = isPaid
-              ? 'paid'
-              : isNearest
-              ? 'nearest-highlight'
-              : 'unpaid';
+              if (isPaid) {
+    paidTotal += e.amount;
+    totalDebt -= e.amount;
+    statusIcon = '✅';
+    rowClass = 'paid';
+  } else if (!nearestMarked && paymentDate >= today) {
+    // první neplacená budoucí = nearest
+    statusIcon = '⌛';
+    rowClass = 'nearest-highlight';
+    nearestMarked = true;
+  } else {
+    statusIcon = '➖';
+    rowClass = 'unpaid';
+  }
 
             return `
-              <tr class="${rowClass}">
-                <td>${d}</td>
-                <td>${statusIcon}</td>
-                <td>£80 nájem + £${e.amount} splátka</td>
-              </tr>
-            `;
-          }).join('')}
+    <tr class="${rowClass}">
+      <td>${d}</td>
+      <td>${statusIcon}</td>
+      <td>£80 nájem + £${e.amount} splátka</td>
+    </tr>
+  `;
+}).join('');}
         </tbody>
       `;
 
