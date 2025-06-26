@@ -32,8 +32,6 @@ function loadPayments() {
       const today = new Date();
       today.setHours(0, 0, 0, 0); // zbavíme se času
 let nearestMarked = false;
-const today = new Date();
-today.setHours(0, 0, 0, 0);
 
 const rows = data.map(e => {
   const paymentDate = new Date(e.date);
