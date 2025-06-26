@@ -19,7 +19,6 @@ Promise.all(preloadImages).then(() => {
   cat.style.display = 'block';
 });
 
-// 📊 Načtení a zobrazení splátek
 function loadPayments() {
   fetch('payments.json')
     .then(res => res.json())
@@ -29,45 +28,49 @@ function loadPayments() {
 
       let paidTotal = 740;
       let totalDebt = 4100 - paidTotal;
+
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // zbavíme se času
-let nearestMarked = false;
+      today.setHours(0, 0, 0, 0);
 
-const rows = data.map(e => {
-  const paymentDate = new Date(e.date);
-  paymentDate.setHours(0, 0, 0, 0);
-  const d = paymentDate.toLocaleDateString('cs-CZ');
+      let nearestMarked = false;
 
-  let statusIcon, rowClass;
+      const rows = data.map(e => {
+        const paymentDate = new Date(e.date);
+        paymentDate.setHours(0, 0, 0, 0);
+        const d = paymentDate.toLocaleDateString('cs-CZ');
 
-  if (paymentDate < today) {
-    // 📅 Datum je v minulosti → automaticky zaplaceno
-    paidTotal += e.amount;
-    totalDebt -= e.amount;
-    statusIcon = '✅';
-    rowClass = 'paid';
-  } else if (!nearestMarked && paymentDate.getTime() === today.getTime()) {
-    // 🎯 dnešní den = nejbližší splátka
-    nearestMarked = true;
-    statusIcon = '⌛';
-    rowClass = 'nearest-highlight';
-  } else if (!nearestMarked && paymentDate > today) {
-    nearestMarked = true;
-    statusIcon = '⌛';
-    rowClass = 'nearest-highlight';
-  } else {
-    statusIcon = '➖';
-    rowClass = 'unpaid';
-  }
+        let statusIcon, rowClass;
 
-  return `
-    <tr class="${rowClass}">
-      <td>${d}</td>
-      <td>${statusIcon}</td>
-      <td>£80 nájem + £${e.amount} splátka</td>
-    </tr>
-  `;
-}).join('');
+        if (paymentDate < today) {
+          // 📅 Datum je v minulosti → automaticky zaplaceno
+          paidTotal += e.amount;
+          totalDebt -= e.amount;
+          statusIcon = '✅';
+          rowClass = 'paid';
+        } else if (!nearestMarked && paymentDate.getTime() === today.getTime()) {
+          // 🎯 dnešní den = nejbližší splátka
+          nearestMarked = true;
+          statusIcon = '⌛';
+          rowClass = 'nearest-highlight';
+        } else if (!nearestMarked && paymentDate > today) {
+          nearestMarked = true;
+          statusIcon = '⌛';
+          rowClass = 'nearest-highlight';
+        } else {
+          statusIcon = '➖';
+          rowClass = 'unpaid';
+        }
+
+        return `
+          <tr class="${rowClass}">
+            <td>${d}</td>
+            <td>${statusIcon}</td>
+            <td>£80 nájem + £${e.amount} splátka</td>
+          </tr>
+        `;
+      }).join('');
+      const table = document.createElement('table');
+      table.innerHTML = `
         </tbody>
       `;
       container.appendChild(table);
