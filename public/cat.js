@@ -30,6 +30,7 @@ function loadPayments() {
       let paidTotal = 740;
       let totalDebt = 4100 - paidTotal;
       const today = new Date();
+      today.setHours(0, 0, 0, 0); // zbavíme se času
       let nearestMarked = false;
 
       const table = document.createElement('table');
