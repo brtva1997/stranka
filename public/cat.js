@@ -69,18 +69,22 @@ function loadPayments() {
           </tr>
         `;
       }).join('');
+
       const table = document.createElement('table');
       table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Status</th>
+            <th>Částka</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
         </tbody>
       `;
-      container.appendChild(table);
 
-      const weeklyInstallment = 45;
-      const estimatedInstallments = Math.ceil(totalDebt / weeklyInstallment);
-      const message = document.createElement('p');
-      message.textContent = `Zbývající počet splátek: ${estimatedInstallments} × £${weeklyInstallment}`;
-      message.className = 'installments-info';
-      container.appendChild(message);
+      container.appendChild(table);
 
       document.getElementById('paidAmount').textContent = paidTotal.toLocaleString('en-GB', {
         style: 'currency',
@@ -91,6 +95,14 @@ function loadPayments() {
         style: 'currency',
         currency: 'GBP'
       });
+
+      const weeklyInstallment = 45;
+      const estimatedInstallments = Math.ceil(totalDebt / weeklyInstallment);
+
+      const message = document.createElement('p');
+      message.textContent = `Zbývající počet splátek: ${estimatedInstallments} × £${weeklyInstallment}`;
+      message.className = 'installments-info';
+      container.appendChild(message);
     });
 }
 // 💖 Padající srdíčka v pozadí
