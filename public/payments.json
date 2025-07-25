@@ -10,5 +10,16 @@
   { "date": "2025-07-31", "status": "unpaid", "amount": 45 },
   { "date": "2025-08-07", "status": "unpaid", "amount": 45 },
   { "date": "2025-08-14", "status": "unpaid", "amount": 45 },
+  { "date": "2025-06-05", "status": "paid", "amount": 45 },
+  { "date": "2025-06-12", "status": "paid", "amount": 45 },
+  { "date": "2025-06-19", "status": "paid", "amount": 45 },
+  { "date": "2025-06-26", "status": "unpaid", "amount": 45 },
+  { "date": "2025-07-03", "status": "unpaid", "amount": 45 },
+  { "date": "2025-07-10", "status": "unpaid", "amount": 45 },
+  { "date": "2025-07-17", "status": "unpaid", "amount": 45 },
+  { "date": "2025-07-24", "status": "unpaid", "amount": 45 },
+  { "date": "2025-07-31", "status": "unpaid", "amount": 45 },
+  { "date": "2025-08-07", "status": "unpaid", "amount": 45 },
+  { "date": "2025-08-14", "status": "unpaid", "amount": 45 },
   { "date": "2025-08-21", "status": "unpaid", "amount": 45 }
 ]
